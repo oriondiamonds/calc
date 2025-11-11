@@ -1,520 +1,807 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jewelry Price Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f3f0; /* Light cream background */
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f7f3f0;
+      }
+      .card {
+        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        border-radius: 1.5rem;
+        background-color: #ffffff;
+      }
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type="number"] {
+        appearance: textfield;
+      }
+      .input-field {
+        border: 1px solid #d1d5db;
+        padding: 0.6rem 0.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+      }
+      .input-field:focus {
+        border-color: #b45f06;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(180, 95, 6, 0.2);
+      }
+      .grid-3-label {
+        font-size: 0.65rem;
+      }
+      @media (max-width: 640px) {
+        .grid-3-label {
+          font-size: 0.7rem;
         }
-        .card {
-            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            border-radius: 1.5rem;
-            background-color: #ffffff;
+        .grid-cols-3 {
+          grid-template-columns: 1fr;
         }
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
-        .input-field {
-            border: 1px solid #d1d5db;
-            padding: 0.6rem 0.5rem; /* Reduced padding for compact layout */
-            border-radius: 0.5rem;
-            transition: all 0.2s;
-        }
-        .input-field:focus {
-            border-color: #b45f06;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(180, 95, 6, 0.2);
-        }
-        /* Style for the diamond input labels for smaller screens */
-        .grid-3-label { font-size: 0.65rem; }
+      }
     </style>
-</head>
-<body class="p-4 md:p-8 min-h-screen flex items-start justify-center">
+  </head>
+  <body class="p-4 md:p-8 min-h-screen flex items-start justify-center">
+    <div class="card w-full max-w-5xl p-6 md:p-10 my-8">
+      <h1
+        class="text-3xl md:text-4xl font-extrabold text-[#b45f06] mb-8 text-center"
+      >
+        Jewelry Pricing Tool (₹)
+      </h1>
 
-    <div class="card w-full max-w-4xl p-6 md:p-10 my-8">
-        <h1 class="text-3xl md:text-4xl font-extrabold text-[#b45f06] mb-8 text-center">Jewelry Pricing Tool (₹)</h1>
+      <!-- ==================== GOLD ==================== -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="space-y-6 p-4 bg-yellow-50 rounded-xl">
+          <h2
+            class="text-xl font-bold text-gray-800 border-b pb-2 mb-4 flex items-center"
+          >
+            <svg
+              class="w-6 h-6 mr-2 text-yellow-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11.049 2.5a1.5 1.5 0 011.902 0l1.519 1.348a1.5 1.5 0 001.21.359l2.09-.442a1.5 1.5 0 011.59 1.73l-.442 2.09a1.5 1.5 0 00.359 1.21l1.348 1.519a1.5 1.5 0 010 1.902l-1.348 1.519a1.5 1.5 0 00-.359 1.21l.442 2.09a1.5 1.5 0 01-1.59 1.73l-2.09-.442a1.5 1.5 0 00-1.21.359l-1.519 1.348a1.5 1.5 0 01-1.902 0l-1.519-1.348a1.5 1.5 0 00-1.21-.359l-2.09.442a1.5 1.5 0 01-1.59-1.73l.442-2.09a1.5 1.5 0 00-.359-1.21l-1.348-1.519a1.5 1.5 0 010-1.902l1.348-1.519a1.5 1.5 0 00.359-1.21l-.442-2.09a1.5 1.5 0 011.59-1.73l2.09.442a1.5 1.5 0 001.21-.359l1.519-1.348z"
+              ></path>
+            </svg>
+            Gold Component
+          </h2>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <label
+              for="currentGoldPrice"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Current 24kt Gold Price (per gram in ₹)
+            </label>
+            <input
+              type="number"
+              id="currentGoldPrice"
+              value="6500"
+              min="0"
+              oninput="calculatePrice()"
+              class="input-field w-full"
+              placeholder="e.g. 6500"
+            />
+          </div>
 
-            <div class="space-y-6 p-4 bg-yellow-50 rounded-xl">
-                <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.5a1.5 1.5 0 011.902 0l1.519 1.348a1.5 1.5 0 001.21.359l2.09-.442a1.5 1.5 0 011.59 1.73l-.442 2.09a1.5 1.5 0 00.359 1.21l1.348 1.519a1.5 1.5 0 010 1.902l-1.348 1.519a1.5 1.5 0 00-.359 1.21l.442 2.09a1.5 1.5 0 01-1.59 1.73l-2.09-.442a1.5 1.5 0 00-1.21.359l-1.519 1.348a1.5 1.5 0 01-1.902 0l-1.519-1.348a1.5 1.5 0 00-1.21-.359l-2.09.442a1.5 1.5 0 01-1.59-1.73l.442-2.09a1.5 1.5 0 00-.359-1.21l-1.348-1.519a1.5 1.5 0 010-1.902l1.348-1.519a1.5 1.5 0 00.359-1.21l-.442-2.09a1.5 1.5 0 011.59-1.73l2.09.442a1.5 1.5 0 001.21-.359l1.519-1.348z"></path></svg>
-                    Gold Component
-                </h2>
+          <div>
+            <label
+              for="goldWeight"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Required Gold Weight (grams)
+            </label>
+            <input
+              type="number"
+              id="goldWeight"
+              value="5.0"
+              min="0.1"
+              step="0.01"
+              oninput="calculatePrice()"
+              class="input-field w-full"
+              placeholder="e.g. 5.0"
+            />
+          </div>
+
+          <div>
+            <label
+              for="goldKaratSelect"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Select Gold Purity (Karat) for Final Price
+            </label>
+            <select
+              id="goldKaratSelect"
+              onchange="calculatePrice()"
+              class="input-field w-full bg-white"
+            >
+              <option value="14kt">14kt (58.33%)</option>
+              <option value="18kt">18kt (75%)</option>
+              <option value="10kt">10kt (41.67%)</option>
+              <option value="9kt">9kt (37.5%)</option>
+            </select>
+          </div>
+
+          <div
+            class="p-3 bg-yellow-100 rounded-lg text-sm font-bold text-yellow-900 border border-yellow-300"
+          >
+            <p>
+              Selected Gold Price/Gram (<span id="selectedKaratDisplay"
+                >14kt</span
+              >): ₹<span id="selectedKaratPricePerGram">0.00</span>
+            </p>
+          </div>
+
+          <div id="goldValueOutput" class="pt-4 border-t border-yellow-200">
+            <p class="text-base font-semibold text-gray-700 mb-2">
+              Gold Value Breakdown (24kt Price: ₹<span id="gold24ktValue"
+                >0.00</span
+              >)
+            </p>
+            <ul class="space-y-1 text-sm text-gray-600">
+              <li>9kt Value: ₹<span id="gold9ktValue">0.00</span> (37.5%)</li>
+              <li>
+                10kt Value: ₹<span id="gold10ktValue">0.00</span> (41.67%)
+              </li>
+              <li>
+                14kt Value: ₹<span id="gold14ktValue">0.00</span> (58.33%)
+              </li>
+              <li>18kt Value: ₹<span id="gold18ktValue">0.00</span> (75%)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ==================== DIAMOND ==================== -->
+        <div class="space-y-4 p-4 bg-blue-50 rounded-xl">
+          <h2
+            class="text-xl font-bold text-gray-800 border-b pb-2 mb-2 flex items-center"
+          >
+            <svg
+              class="w-6 h-6 mr-2 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 3v4M3 5h4M6 17v4M17 3v4M21 5h-4M7 3H3v18h18V3h-4M5 13H3v-2h2v2zm14 0h2v-2h-2v2zm-7 0v-2h2v2h-2zm0 4h2v-2h-2v2zm0-8h2V7h-2v2zm-4 0h2V7h-2v2zm8 0h2V7h-2v2z"
+              ></path>
+            </svg>
+            Diamond Component (Max 5 Types)
+          </h2>
+
+          <div id="diamondInputsContainer" class="space-y-3">
+            <!-- Diamond rows (1-5) -->
+            <!-- Row 1 is visible by default, others hidden -->
+            <!-- (HTML unchanged except for responsive grid) -->
+            <div
+              class="p-3 bg-white rounded-lg shadow-sm border border-blue-100"
+              id="diamondRow1"
+            >
+              <h3 class="font-semibold text-sm mb-2 text-blue-700">
+                Diamond Type 1
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div>
-                    <label for="currentGoldPrice" class="block text-sm font-medium text-gray-700 mb-1">Current 24kt Gold Price (per gram in ₹)</label>
-                    <input type="number" id="currentGoldPrice" value="6500" min="0" oninput="calculatePrice()" class="input-field w-full" placeholder="e.g. 6500">
+                  <label
+                    for="carat1"
+                    class="block grid-3-label text-gray-500 mb-1"
+                    >Carat (per piece)</label
+                  >
+                  <input
+                    type="number"
+                    id="carat1"
+                    value="0.5"
+                    min="0"
+                    step="0.01"
+                    oninput="calculatePrice()"
+                    class="input-field w-full text-sm"
+                    placeholder="Carat"
+                  />
                 </div>
                 <div>
-                    <label for="goldWeight" class="block text-sm font-medium text-gray-700 mb-1">Required Gold Weight (grams)</label>
-                    <input type="number" id="goldWeight" value="5.0" min="0.1" step="0.01" oninput="calculatePrice()" class="input-field w-full" placeholder="e.g. 5.0">
+                  <label
+                    for="price1"
+                    class="block grid-3-label text-gray-500 mb-1"
+                    >Price/Carat (₹)</label
+                  >
+                  <input
+                    type="number"
+                    id="price1"
+                    value="15000"
+                    min="0"
+                    oninput="calculatePrice()"
+                    class="input-field w-full text-sm"
+                    placeholder="Price/Carat"
+                  />
                 </div>
                 <div>
-                    <label for="goldKaratSelect" class="block text-sm font-medium text-gray-700 mb-1">Select Gold Purity (Karat) for Final Price</label>
-                    <select id="goldKaratSelect" onchange="calculatePrice()" class="input-field w-full bg-white">
-                        <option value="14kt">14kt (58.33%)</option>
-                        <option value="18kt">18kt (75%)</option>
-                        <option value="10kt">10kt (41.67%)</option>
-                        <option value="9kt">9kt (37.5%)</option>
-                    </select>
+                  <label
+                    for="qty1"
+                    class="block grid-3-label text-gray-500 mb-1"
+                    >Quantity</label
+                  >
+                  <input
+                    type="number"
+                    id="qty1"
+                    value="10"
+                    min="0"
+                    step="1"
+                    oninput="calculatePrice()"
+                    class="input-field w-full text-sm"
+                    placeholder="Qty"
+                  />
                 </div>
-                
-                <div class="p-3 bg-yellow-100 rounded-lg text-sm font-bold text-yellow-900 border border-yellow-300">
-                    <p>Selected Gold Price/Gram (<span id="selectedKaratDisplay">14kt</span>): ₹<span id="selectedKaratPricePerGram">0.00</span></p>
-                </div>
-
-                <div id="goldValueOutput" class="pt-4 border-t border-yellow-200">
-                    <p class="text-base font-semibold text-gray-700 mb-2">Gold Value Breakdown (24kt Price: ₹<span id="gold24ktValue">0.00</span>)</p>
-                    <ul class="space-y-1 text-sm text-gray-600">
-                        <li>9kt Value: ₹<span id="gold9ktValue">0.00</span> (37.5%)</li>
-                        <li>10kt Value: ₹<span id="gold10ktValue">0.00</span> (41.67%)</li>
-                        <li>14kt Value: ₹<span id="gold14ktValue">0.00</span> (58.33%)</li>
-                        <li>18kt Value: ₹<span id="gold18ktValue">0.00</span> (75%)</li>
-                    </ul>
-                </div>
-
+              </div>
+              <p class="text-xs text-gray-600 mt-2 font-medium">
+                Cost (incl. margin): ₹<span id="cost1">0.00</span>
+              </p>
             </div>
 
-            <div class="space-y-4 p-4 bg-blue-50 rounded-xl">
-                <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-2 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4M17 3v4M21 5h-4M7 3H3v18h18V3h-4M5 13H3v-2h2v2zm14 0h2v-2h-2v2zm-7 0v-2h2v2h-2zm0 4h2v-2h-2v2zm0-8h2V7h-2v2zm-4 0h2V7h-2v2zm8 0h2V7h-2v2z"></path></svg>
-                    Diamond Component (Max 5 Types)
-                </h2>
+            <!-- Rows 2-5 are hidden initially (same structure) -->
+            <!-- (Only first row shown for brevity – copy-paste the same block with id changes) -->
+            <!-- ... Row 2-5 omitted here for readability; they are identical to Row 1 except id numbers and class "hidden" ... -->
+          </div>
 
-                <div id="diamondInputsContainer" class="space-y-3">
-                    <div class="p-3 bg-white rounded-lg shadow-sm border border-blue-100" id="diamondRow1">
-                        <h3 class="font-semibold text-sm mb-2 text-blue-700">Diamond Type 1</h3>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div><label for="carat1" class="block grid-3-label text-gray-500 mb-1">Carat (per piece)</label><input type="number" id="carat1" value="0.5" min="0" step="0.01" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Carat"></div>
-                            <div><label for="price1" class="block grid-3-label text-gray-500 mb-1">Price/Carat (₹)</label><input type="number" id="price1" value="15000" min="0" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Price/Carat"></div>
-                            <div><label for="qty1" class="block grid-3-label text-gray-500 mb-1">Quantity</label><input type="number" id="qty1" value="10" min="0" step="1" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Qty"></div>
-                        </div>
-                        <p class="text-xs text-gray-600 mt-2 font-medium">Cost (incl. margin): ₹<span id="cost1">0.00</span></p>
-                    </div>
+          <button
+            id="addDiamondButton"
+            onclick="addDiamondRow()"
+            class="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out flex items-center justify-center space-x-2"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span>Add Another Diamond Type</span>
+          </button>
 
-                    <div class="p-3 bg-white rounded-lg shadow-sm border border-blue-100 hidden" id="diamondRow2">
-                        <h3 class="font-semibold text-sm mb-2 text-blue-700">Diamond Type 2</h3>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div><label for="carat2" class="block grid-3-label text-gray-500 mb-1">Carat (per piece)</label><input type="number" id="carat2" value="0" min="0" step="0.01" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Carat"></div>
-                            <div><label for="price2" class="block grid-3-label text-gray-500 mb-1">Price/Carat (₹)</label><input type="number" id="price2" value="0" min="0" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Price/Carat"></div>
-                            <div><label for="qty2" class="block grid-3-label text-gray-500 mb-1">Quantity</label><input type="number" id="qty2" value="0" min="0" step="1" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Qty"></div>
-                        </div>
-                        <p class="text-xs text-gray-600 mt-2 font-medium">Cost (incl. margin): ₹<span id="cost2">0.00</span></p>
-                    </div>
+          <div
+            id="diamondSummary"
+            class="pt-4 border-t border-blue-200 text-sm text-gray-600 space-y-1"
+          >
+            <p>
+              Total Carats (All Types):
+              <span id="totalCarats" class="font-medium">0.00</span>
+            </p>
+            <p>
+              Total Base Diamond Value: ₹<span
+                id="totalBaseDiamondValue"
+                class="font-medium"
+                >0.00</span
+              >
+            </p>
+            <p class="font-semibold text-base text-blue-800">
+              Final Diamond Price (incl. Margin): ₹<span id="finalDiamondPrice"
+                >0.00</span
+              >
+            </p>
+          </div>
+        </div>
+      </div>
 
-                    <div class="p-3 bg-white rounded-lg shadow-sm border border-blue-100 hidden" id="diamondRow3">
-                        <h3 class="font-semibold text-sm mb-2 text-blue-700">Diamond Type 3</h3>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div><label for="carat3" class="block grid-3-label text-gray-500 mb-1">Carat (per piece)</label><input type="number" id="carat3" value="0" min="0" step="0.01" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Carat"></div>
-                            <div><label for="price3" class="block grid-3-label text-gray-500 mb-1">Price/Carat (₹)</label><input type="number" id="price3" value="0" min="0" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Price/Carat"></div>
-                            <div><label for="qty3" class="block grid-3-label text-gray-500 mb-1">Quantity</label><input type="number" id="qty3" value="0" min="0" step="1" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Qty"></div>
-                        </div>
-                        <p class="text-xs text-gray-600 mt-2 font-medium">Cost (incl. margin): ₹<span id="cost3">0.00</span></p>
-                    </div>
+      <!-- ==================== PROFIT & COST CONFIG ==================== -->
+      <div class="mt-8 p-6 bg-green-50 rounded-xl border border-green-200">
+        <h2
+          class="text-xl font-bold text-gray-800 border-b pb-2 mb-4 flex items-center text-green-700"
+        >
+          <svg
+            class="w-6 h-6 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2h-2m0 0h-2m-2 0h2m0 0v-2m0 2v2m0 0h2m0 0h2m-2 0v2m0 0V8m0 4h2m0 0h2m-2 0v2m0 0V8m0 4h2m0 0h2m-2 0v2m0 0V8m-2 8c0 1.657-1.343 3-3 3s-3-1.343-3-3m0 0V8m0 4h2m0 0h2m-2 0v2m0 0V8"
+            ></path>
+          </svg>
+          Profit & Cost Configuration
+        </h2>
 
-                    <div class="p-3 bg-white rounded-lg shadow-sm border border-blue-100 hidden" id="diamondRow4">
-                        <h3 class="font-semibold text-sm mb-2 text-blue-700">Diamond Type 4</h3>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div><label for="carat4" class="block grid-3-label text-gray-500 mb-1">Carat (per piece)</label><input type="number" id="carat4" value="0" min="0" step="0.01" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Carat"></div>
-                            <div><label for="price4" class="block grid-3-label text-gray-500 mb-1">Price/Carat (₹)</label><input type="number" id="price4" value="0" min="0" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Price/Carat"></div>
-                            <div><label for="qty4" class="block grid-3-label text-gray-500 mb-1">Quantity</label><input type="number" id="qty4" value="0" min="0" step="1" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Qty"></div>
-                        </div>
-                        <p class="text-xs text-gray-600 mt-2 font-medium">Cost (incl. margin): ₹<span id="cost4">0.00</span></p>
-                    </div>
-
-                    <div class="p-3 bg-white rounded-lg shadow-sm border border-blue-100 hidden" id="diamondRow5">
-                        <h3 class="font-semibold text-sm mb-2 text-blue-700">Diamond Type 5</h3>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div><label for="carat5" class="block grid-3-label text-gray-500 mb-1">Carat (per piece)</label><input type="number" id="carat5" value="0" min="0" step="0.01" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Carat"></div>
-                            <div><label for="price5" class="block grid-3-label text-gray-500 mb-1">Price/Carat (₹)</label><input type="number" id="price5" value="0" min="0" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Price/Carat"></div>
-                            <div><label for="qty5" class="block grid-3-label text-gray-500 mb-1">Quantity</label><input type="number" id="qty5" value="0" min="0" step="1" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="Qty"></div>
-                        </div>
-                        <p class="text-xs text-gray-600 mt-2 font-medium">Cost (incl. margin): ₹<span id="cost5">0.00</span></p>
-                    </div>
-                </div>
-
-                <button id="addDiamondButton" onclick="addDiamondRow()" class="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out flex items-center justify-center space-x-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>Add Another Diamond Type</span>
-                </button>
-                
-                <div id="diamondSummary" class="pt-4 border-t border-blue-200 text-sm text-gray-600 space-y-1">
-                    <p>Total Carats (All Types): <span id="totalCarats" class="font-medium">0.00</span></p>
-                    <p>Total Base Diamond Value: ₹<span id="totalBaseDiamondValue" class="font-medium">0.00</span></p>
-                    <p class="font-semibold text-base text-blue-800">Final Diamond Price (incl. Margin): ₹<span id="finalDiamondPrice">0.00</span></p>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-3 p-4 bg-white rounded-lg shadow-sm">
+            <h3 class="font-semibold text-sm text-gray-700 border-b pb-2">
+              Gold Making Charges (Rates per Gram)
+            </h3>
+            <div>
+              <label
+                for="makingChargeRateHigh"
+                class="block text-xs font-medium text-gray-500 mb-1"
+              >
+                Rate for Gold Weight ≤ 2g (₹/gram)
+              </label>
+              <input
+                type="number"
+                id="makingChargeRateHigh"
+                value="950"
+                min="0"
+                oninput="calculatePrice()"
+                class="input-field w-full text-sm"
+                placeholder="e.g. 950"
+              />
             </div>
+            <div>
+              <label
+                for="makingChargeRateLow"
+                class="block text-xs font-medium text-gray-500 mb-1"
+              >
+                Rate for Gold Weight > 2g (₹/gram)
+              </label>
+              <input
+                type="number"
+                id="makingChargeRateLow"
+                value="700"
+                min="0"
+                oninput="calculatePrice()"
+                class="input-field w-full text-sm"
+                placeholder="e.g. 700"
+              />
+            </div>
+            <div class="pt-2 border-t border-gray-100">
+              <label
+                for="makingChargeMargin"
+                class="block text-xs font-medium text-gray-500 mb-1 font-bold text-green-700"
+              >
+                Profit Margin on Making Charges (%)
+              </label>
+              <input
+                type="number"
+                id="makingChargeMargin"
+                value="30"
+                min="0"
+                max="1000"
+                oninput="calculatePrice()"
+                class="input-field w-full text-sm"
+                placeholder="e.g. 30"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-3 p-4 bg-white rounded-lg shadow-sm">
+            <h3 class="font-semibold text-sm text-gray-700 border-b pb-2">
+              Diamond Profit Margin (Percentage)
+            </h3>
+            <div>
+              <label
+                for="diamondMarginSmall"
+                class="block text-xs font-medium text-gray-500 mb-1"
+              >
+                Margin for Small Stones (< 1.0ct / piece) (%)
+              </label>
+              <input
+                type="number"
+                id="diamondMarginSmall"
+                value="50"
+                min="0"
+                max="1000"
+                oninput="calculatePrice()"
+                class="input-field w-full text-sm"
+                placeholder="e.g. 50"
+              />
+            </div>
+            <div>
+              <label
+                for="diamondMarginLarge"
+                class="block text-xs font-medium text-gray-500 mb-1"
+              >
+                Margin for Large Stones (≥ 1.0ct / piece) (%)
+              </label>
+              <input
+                type="number"
+                id="diamondMarginLarge"
+                value="80"
+                min="0"
+                max="1000"
+                oninput="calculatePrice()"
+                class="input-field w-full text-sm"
+                placeholder="e.g. 80"
+              />
+            </div>
+          </div>
         </div>
 
-        <div class="mt-8 p-6 bg-green-50 rounded-xl border border-green-200">
-            <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4 flex items-center text-green-700">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2h-2m0 0h-2m-2 0h2m0 0v-2m0 2v2m0 0h2m0 0h2m-2 0v2m0 0V8m0 4h2m0 0h2m-2 0v2m0 0V8m0 4h2m0 0h2m-2 0v2m0 0V8m-2 8c0 1.657-1.343 3-3 3s-3-1.343-3-3m0 0V8m0 4h2m0 0h2m-2 0v2m0 0V8"></path></svg>
-                Profit & Cost Configuration
-            </h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-3 p-4 bg-white rounded-lg shadow-sm">
-                    <h3 class="font-semibold text-sm text-gray-700 border-b pb-2">Gold Making Charges (Rates per Gram)</h3>
-                    <div>
-                        <label for="makingChargeRateHigh" class="block text-xs font-medium text-gray-500 mb-1">Rate for Gold Weight $\le$ 2g (₹/gram)</label>
-                        <input type="number" id="makingChargeRateHigh" value="950" min="0" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="e.g. 950">
-                    </div>
-                    <div>
-                        <label for="makingChargeRateLow" class="block text-xs font-medium text-gray-500 mb-1">Rate for Gold Weight $>$ 2g (₹/gram)</label>
-                        <input type="number" id="makingChargeRateLow" value="700" min="0" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="e.g. 700">
-                    </div>
-                    <div class="pt-2 border-t border-gray-100">
-                        <label for="makingChargeMargin" class="block text-xs font-medium text-gray-500 mb-1 font-bold text-green-700">Profit Margin on Making Charges (%)</label>
-                        <input type="number" id="makingChargeMargin" value="30" min="0" max="1000" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="e.g. 30">
-                    </div>
-                </div>
-
-                <div class="space-y-3 p-4 bg-white rounded-lg shadow-sm">
-                    <h3 class="font-semibold text-sm text-gray-700 border-b pb-2">Diamond Profit Margin (Percentage)</h3>
-                    <div>
-                        <label for="diamondMarginSmall" class="block text-xs font-medium text-gray-500 mb-1">Margin for Small Stones ($\lt$ 1.0ct / piece) (%)</label>
-                        <input type="number" id="diamondMarginSmall" value="50" min="0" max="1000" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="e.g. 50">
-                    </div>
-                    <div>
-                        <label for="diamondMarginLarge" class="block text-xs font-medium text-gray-500 mb-1">Margin for Large Stones ($\ge$ 1.0ct / piece) (%)</label>
-                        <input type="number" id="diamondMarginLarge" value="80" min="0" max="1000" oninput="calculatePrice()" class="input-field w-full text-sm" placeholder="e.g. 80">
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-4 p-3 bg-green-100 rounded-lg text-sm text-green-800">
-                <p class="font-semibold">Base Fixed Costs: ₹850.00 <span class="text-xs text-green-600">(Courier ₹700 + Pkg ₹150)</span></p>
-                <p class="text-xs font-semibold text-green-800 mt-1">
-                    IGI Certification Charge: ₹900.00 (Applies if total diamond weight is less than 1.0ct)
-                </p>
-            </div>
+        <div class="mt-4 p-3 bg-green-100 rounded-lg text-sm text-green-800">
+          <p class="font-semibold">
+            Base Fixed Costs: ₹850.00
+            <span class="text-xs text-green-600"
+              >(Courier ₹700 + Pkg ₹150)</span
+            >
+          </p>
+          <p class="text-xs font-semibold text-green-800 mt-1">
+            IGI Certification Charge: ₹900.00 (Applies if total diamond weight <
+            1.0ct)
+          </p>
         </div>
-        
-        <div class="mt-8 p-6 bg-gray-50 rounded-xl">
-            <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">Cost Summary & Final Price</h2>
+      </div>
 
-            <div class="space-y-3 pt-4 border-t border-gray-200">
-                <div class="flex justify-between items-center text-lg">
-                    <span class="font-semibold text-gray-700">1. Total Gold Value (<span id="selectedKaratSummary">14kt</span>):</span>
-                    <span class="font-bold text-yellow-800">₹<span id="totalGoldCost">0.00</span></span>
-                </div>
-                <div class="flex justify-between items-center text-lg">
-                    <span class="font-semibold text-gray-700">2. Total Diamond Value (incl. Margin):</span>
-                    <span class="font-bold text-blue-800">₹<span id="totalDiamondCost">0.00</span></span>
-                </div>
-                <div class="flex justify-between items-center text-lg">
-                    <span class="font-semibold text-gray-700">3. Making Charges:</span>
-                    <span class="font-bold text-gray-800">₹<span id="totalMakingCharges">0.00</span></span>
-                </div>
-                
-                <div class="space-y-1">
-                    <div class="flex justify-between items-center text-lg">
-                        <span class="font-semibold text-gray-700">4. Total Fixed Costs:</span>
-                        <span class="font-bold text-gray-800">₹<span id="totalFixedCost">0.00</span></span>
-                    </div>
-                    <ul class="ml-4 text-xs text-gray-500 space-y-0.5" id="fixedCostBreakdown">
-                        </ul>
-                </div>
-                <div class="h-px bg-gray-300 my-4"></div>
+      <!-- ==================== INTERNAL COST SUMMARY ==================== -->
+      <div class="mt-8 p-6 bg-gray-50 rounded-xl">
+        <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">
+          Cost Summary & Final Price
+        </h2>
 
-                <div class="flex justify-between items-center text-xl">
-                    <span class="font-bold text-gray-800">Subtotal Before GST:</span>
-                    <span class="font-extrabold text-gray-900">₹<span id="subtotalBeforeGST">0.00</span></span>
-                </div>
+        <div class="space-y-3 pt-4 border-t border-gray-200">
+          <div class="flex justify-between items-center text-lg">
+            <span class="font-semibold text-gray-700"
+              >1. Total Gold Value (<span id="selectedKaratSummary">14kt</span
+              >):</span
+            >
+            <span class="font-bold text-yellow-800"
+              >₹<span id="totalGoldCost">0.00</span></span
+            >
+          </div>
+          <div class="flex justify-between items-center text-lg">
+            <span class="font-semibold text-gray-700"
+              >2. Total Diamond Value (incl. Margin):</span
+            >
+            <span class="font-bold text-blue-800"
+              >₹<span id="totalDiamondCost">0.00</span></span
+            >
+          </div>
+          <div class="flex justify-between items-center text-lg">
+            <span class="font-semibold text-gray-700">3. Making Charges:</span>
+            <span class="font-bold text-gray-800"
+              >₹<span id="totalMakingCharges">0.00</span></span
+            >
+          </div>
 
-                <div class="flex justify-between items-center text-xl">
-                    <span class="font-bold text-red-600">3% GST:</span>
-                    <span class="font-extrabold text-red-700">₹<span id="gstValue">0.00</span></span>
-                </div>
-                
-                <div class="flex justify-between items-center text-2xl p-3 bg-[#b45f06] text-white rounded-lg mt-4">
-                    <span class="font-bold">FINAL JEWELRY PRICE:</span>
-                    <span class="font-extrabold">₹<span id="finalTotalPrice">0.00</span></span>
-                </div>
-
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-lg">
+              <span class="font-semibold text-gray-700"
+                >4. Total Fixed Costs:</span
+              >
+              <span class="font-bold text-gray-800"
+                >₹<span id="totalFixedCost">0.00</span></span
+              >
             </div>
+            <ul
+              class="ml-4 text-xs text-gray-500 space-y-0.5"
+              id="fixedCostBreakdown"
+            ></ul>
+          </div>
 
+          <div class="h-px bg-gray-300 my-4"></div>
+
+          <div class="flex justify-between items-center text-xl">
+            <span class="font-bold text-gray-800">Subtotal:</span>
+            <span class="font-extrabold text-gray-900"
+              >₹<span id="subtotalBeforeGST">0.00</span></span
+            >
+          </div>
+
+          <div class="flex justify-between items-center text-xl">
+            <span class="font-bold text-red-600">3% GST:</span>
+            <span class="font-extrabold text-red-700"
+              >₹<span id="gstValue">0.00</span></span
+            >
+          </div>
+
+          <div
+            class="flex justify-between items-center text-2xl p-3 bg-[#b45f06] text-white rounded-lg mt-4"
+          >
+            <span class="font-bold">FINAL JEWELRY PRICE:</span>
+            <span class="font-extrabold"
+              >₹<span id="finalTotalPrice">0.00</span></span
+            >
+          </div>
         </div>
-        <div class="mt-8 p-6 bg-yellow-50 rounded-xl border-4 border-dashed border-gray-200">
-            <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4 text-center text-[#b45f06] flex items-center justify-center">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                Customer Final Quote Summary
-            </h2>
+      </div>
 
-            <div class="space-y-3 pt-4">
-                <div class="flex justify-between items-center text-lg">
-                    <span class="font-semibold text-gray-700">1. Gold Value (<span id="customerKaratSummary">14kt</span>):</span>
-                    <span class="font-bold text-yellow-800">₹<span id="customerGoldCost">0.00</span></span>
-                </div>
-                <div class="flex justify-between items-center text-lg">
-                    <span class="font-semibold text-gray-700">2. Diamond Value (Base Price):</span>
-                    <span class="font-bold text-blue-800">₹<span id="customerBaseDiamondCost">0.00</span></span>
-                </div>
-                <div class="flex justify-between items-center text-lg">
-                    <span class="font-semibold text-gray-700">3. Making Charges:</span>
-                    <span class="font-bold text-gray-800">₹<span id="customerMakingCharges">0.00</span></span>
-                </div>
-                <div class="flex justify-between items-center text-lg">
-                    <span class="font-semibold text-gray-700">4. Fixed Costs & IGI (If Applicable):</span>
-                    <span class="font-bold text-gray-800">₹<span id="customerFixedCost">0.00</span></span>
-                </div>
+      <!-- ==================== CUSTOMER QUOTE ==================== -->
+      <div
+        class="mt-8 p-6 bg-yellow-50 rounded-xl border-4 border-dashed border-gray-200"
+      >
+        <h2
+          class="text-xl font-bold text-gray-800 border-b pb-2 mb-4 text-center text-[#b45f06] flex items-center justify-center"
+        >
+          <svg
+            class="w-6 h-6 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            ></path>
+          </svg>
+          Customer Final Quote Summary
+        </h2>
 
-                <div class="h-px bg-gray-300 my-4"></div>
+        <div class="space-y-3 pt-4">
+          <div class="flex justify-between items-center text-lg">
+            <span class="font-semibold text-gray-700"
+              >1. Gold Value (<span id="customerKaratSummary">14kt</span
+              >):</span
+            >
+            <span class="font-bold text-yellow-800"
+              >₹<span id="customerGoldCost">0.00</span></span
+            >
+          </div>
 
-                <div class="flex justify-between items-center text-xl">
-                    <span class="font-bold text-gray-800">Subtotal Before GST:</span>
-                    <span class="font-extrabold text-gray-900">₹<span id="customerSubtotalBeforeGST">0.00</span></span>
-                </div>
+          <div class="flex justify-between items-center text-lg">
+            <span class="font-semibold text-gray-700">2. Diamond Value:</span>
+            <span class="font-bold text-blue-800"
+              >₹<span id="customerDiamondWithFixed">0.00</span></span
+            >
+          </div>
 
-                <div class="flex justify-between items-center text-xl">
-                    <span class="font-bold text-red-600">3% GST:</span>
-                    <span class="font-extrabold text-red-700">₹<span id="customerGstValue">0.00</span></span>
-                </div>
-                
-                <div class="flex justify-between items-center text-2xl p-3 bg-gray-800 text-white rounded-lg mt-4">
-                    <span class="font-bold">FINAL CUSTOMER PRICE:</span>
-                    <span class="font-extrabold">₹<span id="customerFinalTotalPrice">0.00</span></span>
-                </div>
+          <div class="flex justify-between items-center text-lg">
+            <span class="font-semibold text-gray-700">3. Making Charges:</span>
+            <span class="font-bold text-gray-800"
+              >₹<span id="customerMakingCharges">0.00</span></span
+            >
+          </div>
 
-            </div>
+          <div class="h-px bg-gray-300 my-4"></div>
 
+          <div class="flex justify-between items-center text-xl">
+            <span class="font-bold text-gray-800">Subtotal:</span>
+            <span class="font-extrabold text-gray-900"
+              >₹<span id="customerSubtotalBeforeGST">0.00</span></span
+            >
+          </div>
+
+          <div class="flex justify-between items-center text-xl">
+            <span class="font-bold text-red-600">3% GST:</span>
+            <span class="font-extrabold text-red-700"
+              >₹<span id="customerGstValue">0.00</span></span
+            >
+          </div>
+
+          <div
+            class="flex justify-between items-center text-xl p-3 bg-gray-800 text-white rounded-lg mt-4"
+          >
+            <span class="font-semibold text-base">FINAL CUSTOMER PRICE:</span>
+            <span class="font-bold"
+              >₹<span id="customerFinalTotalPrice">0.00</span></span
+            >
+          </div>
         </div>
-        <p class="text-xs text-center text-gray-400 mt-6">Calculations use the selected gold purity for the final total.</p>
+      </div>
 
+      <p class="text-xs text-center text-gray-400 mt-6">
+        Calculations use the selected gold purity for the final total.
+      </p>
     </div>
 
+    <!-- ==================== JAVASCRIPT ==================== -->
     <script>
-        // Utility function to safely parse inputs
-        const getNum = (id) => parseFloat(document.getElementById(id).value) || 0;
-        const formatCurrency = (value) => value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      // ---------- Utility ----------
+      const getNum = (id) => parseFloat(document.getElementById(id).value) || 0;
+      const formatCurrency = (value) =>
+        value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-        // Constants
-        const GOLD_PURITY = {
-            '24kt': 1.0,
-            '18kt': 0.75,
-            '14kt': 14/24, // ~0.583333
-            '10kt': 10/24, // ~0.416667
-            '9kt': 0.375
-        };
-        
-        // Define Base Fixed Costs and IGI Charge
-        const BASE_FIXED_COSTS = 850; // 700 courier + 150 packaging
-        const IGI_CHARGE = 900;
-        
-        const GST_RATE = 0.03;
-        const MAX_DIAMONDS = 5;
+      // ---------- Constants ----------
+      const GOLD_PURITY = {
+        "24kt": 1.0,
+        "18kt": 0.75,
+        "14kt": 14 / 24,
+        "10kt": 10 / 24,
+        "9kt": 0.375,
+      };
+      const BASE_FIXED_COSTS = 850; // Courier + Packaging
+      const IGI_CHARGE = 900;
+      const GST_RATE = 0.03;
+      const MAX_DIAMONDS = 5;
+      let diamondCount = 1;
 
-        // State for tracking visible diamond rows
-        let diamondCount = 1; 
+      // ---------- Add Diamond Row ----------
+      function addDiamondRow() {
+        if (diamondCount < MAX_DIAMONDS) {
+          diamondCount++;
+          const row = document.getElementById(`diamondRow${diamondCount}`);
+          if (row) row.classList.remove("hidden");
+          document.getElementById(`carat${diamondCount}`).focus();
+        }
+        if (diamondCount === MAX_DIAMONDS)
+          document.getElementById("addDiamondButton").classList.add("hidden");
+        calculatePrice();
+      }
 
-        function addDiamondRow() {
-            if (diamondCount < MAX_DIAMONDS) {
-                diamondCount++;
-                const newRow = document.getElementById(`diamondRow${diamondCount}`);
-                if (newRow) {
-                    newRow.classList.remove('hidden');
-                    // Focus on the first input of the newly added row for better UX
-                    document.getElementById(`carat${diamondCount}`).focus();
-                }
-            }
-            // Hide the button when max is reached
-            if (diamondCount === MAX_DIAMONDS) {
-                document.getElementById('addDiamondButton').classList.add('hidden');
-            }
-            calculatePrice();
+      // ---------- Main Calculation ----------
+      function calculatePrice() {
+        // ----- Gold -----
+        const goldPrice24 = getNum("currentGoldPrice");
+        const goldWeight = getNum("goldWeight");
+        const selectedKarat = document.getElementById("goldKaratSelect").value;
+
+        const goldValue24kt = goldPrice24 * goldWeight;
+        const goldValues = {};
+        for (const kt in GOLD_PURITY)
+          goldValues[kt] = goldValue24kt * GOLD_PURITY[kt];
+        const totalGoldCost = goldValues[selectedKarat];
+
+        // ----- Making Charges -----
+        const rateHigh = getNum("makingChargeRateHigh");
+        const rateLow = getNum("makingChargeRateLow");
+        const makingMarginPct = getNum("makingChargeMargin") / 100;
+
+        const makingRate =
+          goldWeight > 2 ? rateLow : goldWeight > 0 ? rateHigh : 0;
+        const baseMaking = goldWeight * makingRate;
+        const totalMakingCharges = baseMaking * (1 + makingMarginPct);
+
+        // ----- Diamonds -----
+        const marginSmallPct = getNum("diamondMarginSmall") / 100;
+        const marginLargePct = getNum("diamondMarginLarge") / 100;
+
+        let totalCarats = 0,
+          totalBaseDiamond = 0,
+          finalDiamondPrice = 0;
+
+        for (let i = 1; i <= diamondCount; i++) {
+          const carat = getNum(`carat${i}`);
+          const price = getNum(`price${i}`);
+          const qty = getNum(`qty${i}`);
+
+          if (carat > 0 && price > 0 && qty > 0) {
+            const rowCarats = carat * qty;
+            const baseRow = rowCarats * price;
+            const marginPct = carat >= 1 ? marginLargePct : marginSmallPct;
+            const rowFinal = baseRow * (1 + marginPct);
+
+            totalCarats += rowCarats;
+            totalBaseDiamond += baseRow;
+            finalDiamondPrice += rowFinal;
+
+            document.getElementById(`cost${i}`).textContent =
+              formatCurrency(rowFinal);
+          } else {
+            document.getElementById(`cost${i}`).textContent = "0.00";
+          }
         }
 
-        function calculatePrice() {
-            // --- 1. Get Inputs (Gold) ---
-            const currentGoldPrice = getNum('currentGoldPrice');
-            const goldWeight = getNum('goldWeight');
-            // Get the selected karat from the dropdown
-            const selectedKarat = document.getElementById('goldKaratSelect').value;
+        // ----- Fixed Costs & IGI -----
+        let igiApplied = 0;
+        let fixedBreakdown = `<li>Base (Courier + Pkg): ₹${formatCurrency(
+          BASE_FIXED_COSTS
+        )}</li>`;
+        if (totalCarats > 0 && totalCarats < 1) {
+          igiApplied = IGI_CHARGE;
+          fixedBreakdown += `<li class="text-green-600 font-semibold">IGI Certification (Carat < 1.0): ₹${formatCurrency(
+            IGI_CHARGE
+          )}</li>`;
+        } else if (totalCarats >= 1) {
+          fixedBreakdown += `<li class="text-red-500 italic">IGI Not Applied (Carat ≥ 1.0)</li>`;
+        } else {
+          fixedBreakdown += `<li>IGI Not Applicable (No Diamonds)</li>`;
+        }
+        const totalFixedCost = BASE_FIXED_COSTS + igiApplied;
 
-            // --- 2. Gold Calculation ---
-            // Calculate the total 24kt value of the required weight
-            const goldValue24kt = currentGoldPrice * goldWeight;
-            
-            // Calculate price per gram for the selected karat
-            const selectedKaratPricePerGram = currentGoldPrice * GOLD_PURITY[selectedKarat];
+        // ----- Totals -----
+        const subtotal =
+          totalGoldCost +
+          finalDiamondPrice +
+          totalMakingCharges +
+          totalFixedCost;
+        const gst = subtotal * GST_RATE;
+        const finalTotal = subtotal + gst;
 
-            // Calculate all karat values based on the purity percentage
-            const goldValues = {};
-            for (const kt in GOLD_PURITY) {
-                // Formula: (24kt Price * Weight) * Purity Percentage
-                goldValues[kt] = goldValue24kt * GOLD_PURITY[kt];
-            }
-            
-            // Use the value of the SELECTED karat for the total gold cost
-            const totalGoldCost = goldValues[selectedKarat];
+        // ----- INTERNAL DISPLAY -----
+        // Gold
+        document.getElementById("gold24ktValue").textContent =
+          formatCurrency(goldValue24kt);
+        ["9kt", "10kt", "14kt", "18kt"].forEach(
+          (k) =>
+            (document.getElementById(`gold${k}Value`).textContent =
+              formatCurrency(goldValues[k]))
+        );
+        document.getElementById("selectedKaratDisplay").textContent =
+          selectedKarat;
+        document.getElementById("selectedKaratPricePerGram").textContent =
+          formatCurrency(goldPrice24 * GOLD_PURITY[selectedKarat]);
+        document.getElementById("selectedKaratSummary").textContent =
+          selectedKarat;
+        document.getElementById("totalGoldCost").textContent =
+          formatCurrency(totalGoldCost);
 
-            // Update Gold Output section
-            document.getElementById('gold24ktValue').textContent = formatCurrency(goldValue24kt);
-            document.getElementById('gold9ktValue').textContent = formatCurrency(goldValues['9kt']);
-            document.getElementById('gold10ktValue').textContent = formatCurrency(goldValues['10kt']);
-            document.getElementById('gold14ktValue').textContent = formatCurrency(goldValues['14kt']);
-            document.getElementById('gold18ktValue').textContent = formatCurrency(goldValues['18kt']);
-            
-            // Update the display for the selected karat
-            document.getElementById('selectedKaratDisplay').textContent = selectedKarat;
-            document.getElementById('selectedKaratPricePerGram').textContent = formatCurrency(selectedKaratPricePerGram);
-            document.getElementById('selectedKaratSummary').textContent = selectedKarat;
-            document.getElementById('totalGoldCost').textContent = formatCurrency(totalGoldCost);
-            // Also update the new customer summary gold karat display
-            document.getElementById('customerKaratSummary').textContent = selectedKarat;
-            document.getElementById('customerGoldCost').textContent = formatCurrency(totalGoldCost);
+        // Diamond
+        document.getElementById("totalCarats").textContent =
+          totalCarats.toFixed(2);
+        document.getElementById("totalBaseDiamondValue").textContent =
+          formatCurrency(totalBaseDiamond);
+        document.getElementById("finalDiamondPrice").textContent =
+          formatCurrency(finalDiamondPrice);
+        document.getElementById("totalDiamondCost").textContent =
+          formatCurrency(finalDiamondPrice);
 
+        // Making
+        document.getElementById("totalMakingCharges").textContent =
+          formatCurrency(totalMakingCharges);
 
-            // --- 3. Making Charges Calculation (M) ---
-            const makingChargeRateHigh = getNum('makingChargeRateHigh'); // For <= 2g (Default 950)
-            const makingChargeRateLow = getNum('makingChargeRateLow');   // For > 2g (Default 700)
-            const makingChargeMarginPercent = getNum('makingChargeMargin') / 100; // Margin %
+        // Fixed
+        document.getElementById("fixedCostBreakdown").innerHTML =
+          fixedBreakdown;
+        document.getElementById("totalFixedCost").textContent =
+          formatCurrency(totalFixedCost);
 
-            let makingChargeRate = 0;
-            if (goldWeight > 2) {
-                makingChargeRate = makingChargeRateLow; 
-            } else if (goldWeight > 0) {
-                makingChargeRate = makingChargeRateHigh; 
-            }
-            
-            // Base making charges (The cost based on weight and rate)
-            const baseMakingCharges = goldWeight * makingChargeRate;
-            
-            // Apply the profit margin: Base * (1 + Margin%)
-            const totalMakingCharges = baseMakingCharges * (1 + makingChargeMarginPercent);
-            
-            document.getElementById('totalMakingCharges').textContent = formatCurrency(totalMakingCharges);
-            document.getElementById('customerMakingCharges').textContent = formatCurrency(totalMakingCharges); // Customer summary update
+        // Summary
+        document.getElementById("subtotalBeforeGST").textContent =
+          formatCurrency(subtotal);
+        document.getElementById("gstValue").textContent = formatCurrency(gst);
+        document.getElementById("finalTotalPrice").textContent =
+          formatCurrency(finalTotal);
 
+        // ----- CUSTOMER DISPLAY -----
+        document.getElementById("customerKaratSummary").textContent =
+          selectedKarat;
+        document.getElementById("customerGoldCost").textContent =
+          formatCurrency(totalGoldCost);
+        document.getElementById("customerMakingCharges").textContent =
+          formatCurrency(totalMakingCharges);
 
-            // --- 4. Diamond Calculation (D) ---
-            const marginSmallPercent = getNum('diamondMarginSmall') / 100; // e.g., 50% -> 0.50
-            const marginLargePercent = getNum('diamondMarginLarge') / 100; // e.g., 80% -> 0.80
+        // Diamond line now includes the ₹850 fixed cost
+        const diamondWithFixed =
+          finalDiamondPrice + BASE_FIXED_COSTS + igiApplied;
+        document.getElementById("customerDiamondWithFixed").textContent =
+          formatCurrency(diamondWithFixed);
 
-            let totalCarats = 0;
-            let totalBaseDiamondValue = 0;
-            let finalDiamondPrice = 0; // Diamond price incl. margin
-            
-            // Loop up to the current diamondCount
-            for (let i = 1; i <= diamondCount; i++) {
-                // We use getNum, which returns 0 if the field is empty, which is safe.
-                const carat = getNum(`carat${i}`);
-                const pricePerCarat = getNum(`price${i}`);
-                const numDiamonds = getNum(`qty${i}`);
+        // Same subtotal / GST / final as internal
+        document.getElementById("customerSubtotalBeforeGST").textContent =
+          formatCurrency(subtotal);
+        document.getElementById("customerGstValue").textContent =
+          formatCurrency(gst);
+        document.getElementById("customerFinalTotalPrice").textContent =
+          formatCurrency(finalTotal);
+      }
 
-                let finalDiamondPriceRow = 0;
+      // ---------- Init ----------
+      window.onload = function () {
+        const sel = document.getElementById("goldKaratSelect");
+        if (!sel.value) sel.value = "14kt";
 
-                if (carat > 0 && pricePerCarat > 0 && numDiamonds > 0) {
-                    const totalCaratsRow = carat * numDiamonds;
-                    const baseDiamondValueRow = totalCaratsRow * pricePerCarat;
-
-                    let marginPercent = 0;
-                    // Apply profit margin based on individual carat weight using new inputs
-                    if (carat >= 1) {
-                        marginPercent = marginLargePercent; 
-                    } 
-                    else if (carat > 0) {
-                        marginPercent = marginSmallPercent;
-                    }
-
-                    const profitMarginValueRow = baseDiamondValueRow * marginPercent;
-                    finalDiamondPriceRow = baseDiamondValueRow + profitMarginValueRow;
-
-                    // Accumulate totals
-                    totalCarats += totalCaratsRow;
-                    totalBaseDiamondValue += baseDiamondValueRow;
-                    finalDiamondPrice += finalDiamondPriceRow;
-
-                    // Update row specific output
-                    document.getElementById(`cost${i}`).textContent = formatCurrency(finalDiamondPriceRow);
-                } else {
-                     // Clear output if no valid input
-                    document.getElementById(`cost${i}`).textContent = "0.00";
-                }
-            }
-            
-            // Update overall Diamond Output section (Internal)
-            document.getElementById('totalCarats').textContent = totalCarats.toFixed(2);
-            document.getElementById('totalBaseDiamondValue').textContent = formatCurrency(totalBaseDiamondValue);
-            document.getElementById('finalDiamondPrice').textContent = formatCurrency(finalDiamondPrice);
-            document.getElementById('totalDiamondCost').textContent = formatCurrency(finalDiamondPrice);
-            
-            // Update Customer Diamond Output section
-            document.getElementById('customerBaseDiamondCost').textContent = formatCurrency(totalBaseDiamondValue);
-
-
-            // --- 5. Final Totals ---
-            
-            // --- Fixed Costs Logic (Base + Conditional IGI) ---
-            let igiApplied = 0;
-            let fixedCostBreakdownHTML = `<li>Base (Courier + Pkg): ₹${formatCurrency(BASE_FIXED_COSTS)}</li>`;
-
-            // Apply IGI if total carats is less than 1.0ct AND there are diamonds
-            if (totalCarats < 1 && totalCarats > 0) { 
-                igiApplied = IGI_CHARGE;
-                fixedCostBreakdownHTML += `<li class="text-green-600 font-semibold">IGI Certification (Carat $< 1.0$): ₹${formatCurrency(IGI_CHARGE)}</li>`;
-            } else if (totalCarats >= 1) {
-                fixedCostBreakdownHTML += `<li class="text-red-500 italic">IGI Not Applied (Carat $\ge 1.0$)</li>`;
-            } else {
-                fixedCostBreakdownHTML += `<li>IGI Not Applicable (No Diamonds)</li>`;
-            }
-
-            const totalFixedCost = BASE_FIXED_COSTS + igiApplied;
-            
-            // Update Fixed Cost Summary (Internal)
-            document.getElementById('fixedCostBreakdown').innerHTML = fixedCostBreakdownHTML;
-            document.getElementById('totalFixedCost').textContent = formatCurrency(totalFixedCost);
-            
-            // Update Fixed Cost Summary (Customer)
-            document.getElementById('customerFixedCost').textContent = formatCurrency(totalFixedCost);
-
-
-            // Subtotal = Gold + Diamond + Making Charges + Total Fixed Costs
-            const subtotalBeforeGST = totalGoldCost + finalDiamondPrice + totalMakingCharges + totalFixedCost;
-            
-            // GST (3%)
-            const gstValue = subtotalBeforeGST * GST_RATE;
-            
-            // Final Total
-            const finalTotalPrice = subtotalBeforeGST + gstValue;
-            
-
-            // --- 6. Update Final Summary Output (Internal/Detailed) ---
-            document.getElementById('subtotalBeforeGST').textContent = formatCurrency(subtotalBeforeGST);
-            document.getElementById('gstValue').textContent = formatCurrency(gstValue);
-            document.getElementById('finalTotalPrice').textContent = formatCurrency(finalTotalPrice);
-            
-            // --- 7. Update Customer Final Summary Output ---
-            // Customer Subtotal: Gold + Base Diamond Value + Making Charges + Fixed Costs (no Diamond margin added here)
-            // NOTE: The margin is built into the final total price. To maintain the correct final price, we must use the 'totalDiamondCost' (which includes margin) for the final customer total calculation.
-            // For the customer display *breakdown*, we use Base Diamond Value, but the GST and Final Price must be the same as the detailed view.
-            
-            // We use the *same* final calculated subtotal and GST for the customer quote to ensure the final price is accurate.
-            document.getElementById('customerSubtotalBeforeGST').textContent = formatCurrency(subtotalBeforeGST);
-            document.getElementById('customerGstValue').textContent = formatCurrency(gstValue);
-            document.getElementById('customerFinalTotalPrice').textContent = formatCurrency(finalTotalPrice);
+        // Build hidden diamond rows (2-5) – same HTML as row 1 but hidden
+        for (let i = 2; i <= 5; i++) {
+          const row1 = document.getElementById("diamondRow1").cloneNode(true);
+          row1.id = `diamondRow${i}`;
+          row1.classList.add("hidden");
+          // update ids
+          row1.querySelectorAll("[id]").forEach((el) => {
+            const oldId = el.id;
+            const newId = oldId.replace(/\d+$/, i);
+            el.id = newId;
+            if (el.tagName === "LABEL") el.setAttribute("for", newId);
+          });
+          // reset values
+          row1.querySelectorAll("input").forEach((inp) => (inp.value = "0"));
+          row1.querySelector("span[id]").textContent = "0.00";
+          document.getElementById("diamondInputsContainer").appendChild(row1);
         }
 
-        // Run calculation on load to show initial values
-        window.onload = function() {
-            // Set initial value for 14kt in the dropdown, as it was missing from HTML
-            const selectElement = document.getElementById('goldKaratSelect');
-            if (selectElement.value === "") {
-                selectElement.value = "14kt";
-            }
-            calculatePrice();
-        };
-
+        calculatePrice();
+      };
     </script>
-</body>
+  </body>
 </html>
