@@ -713,7 +713,7 @@
             totalBaseDiamond += baseRow;
             finalDiamondPrice += rowFinal;
 
-            caratList.push(carat.toFixed(2) + "ct");
+            caratList.push(qty + "-" + carat.toFixed(2) + "ct");
 
             document.getElementById(`cost${i}`).textContent =
               formatCurrency(rowFinal);
