@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jewelry Price Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
       rel="stylesheet"
@@ -41,6 +43,14 @@
       }
       .grid-3-label {
         font-size: 0.65rem;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .animate-spin {
+        animation: spin 1s linear infinite;
       }
       @media (max-width: 640px) {
         .grid-3-label {
@@ -631,7 +641,29 @@
         Calculations use the selected gold purity for the final total.
       </p>
     </div>
-
+    <!-- ==================== DOWNLOAD PDF BUTTON ==================== -->
+    <div class="mt-6 text-center">
+      <button
+        id="downloadPdfButton"
+        onclick="downloadPDF()"
+        class="inline-flex items-center px-6 py-3 bg-[#b45f06] hover:bg-[#8b4a05] text-white font-bold rounded-lg shadow-lg transition duration-150 ease-in-out space-x-2"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          ></path>
+        </svg>
+        <span>Download as PDF</span>
+      </button>
+    </div>
     <!-- ==================== JAVASCRIPT ==================== -->
     <script>
       // ---------- Utility ----------
@@ -647,7 +679,7 @@
         "10kt": 10 / 24,
         "9kt": 0.375,
       };
-      const BASE_FIXED_COSTS = 850; // Courier + Packaging
+      const BASE_FIXED_COSTS = 850;
       const IGI_CHARGE = 900;
       const GST_RATE = 0.03;
       const MAX_DIAMONDS = 5;
@@ -789,6 +821,8 @@
         // Making
         document.getElementById("totalMakingCharges").textContent =
           formatCurrency(totalMakingCharges);
+        document.getElementById("makingPercent").textContent =
+          makingPct.toFixed(1);
         document.getElementById("customerMakingPercent").textContent =
           makingPct.toFixed(1);
 
@@ -853,12 +887,75 @@
         }
       }
 
+      // ---------- Download PDF ----------
+      async function downloadPDF() {
+        const button = document.getElementById("downloadPdfButton");
+        const originalText = button.innerHTML;
+
+        // Show loading state
+        button.innerHTML =
+          '<svg class="animate-spin h-5 w-5 mx-auto" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+        button.disabled = true;
+
+        try {
+          const element = document.querySelector(".card");
+
+          // Generate canvas from the card element
+          const canvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: "#ffffff",
+          });
+
+          // Get dimensions
+          const imgWidth = 210; // A4 width in mm
+          const pageHeight = 297; // A4 height in mm
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          let heightLeft = imgHeight;
+
+          const imgData = canvas.toDataURL("image/png");
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF("p", "mm", "a4");
+          let position = 0;
+
+          // Add first page
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+
+          // Add additional pages if needed
+          while (heightLeft > 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+          }
+
+          // Get product name for filename
+          const productName = document
+            .getElementById("productName")
+            .value.trim();
+          const filename = productName
+            ? `${productName.replace(/[^a-z0-9]/gi, "_")}_Jewelry_Quote.pdf`
+            : "Jewelry_Price_Quote.pdf";
+
+          pdf.save(filename);
+        } catch (error) {
+          console.error("Error generating PDF:", error);
+          alert("Error generating PDF. Please try again.");
+        } finally {
+          // Restore button
+          button.innerHTML = originalText;
+          button.disabled = false;
+        }
+      }
+
       // ---------- Init ----------
       window.onload = function () {
         const sel = document.getElementById("goldKaratSelect");
         if (!sel.value) sel.value = "14kt";
 
-        // Build hidden diamond rows (2-5) – same HTML as row 1 but hidden
+        // Build hidden diamond rows (2-5)
         for (let i = 2; i <= 5; i++) {
           const row1 = document.getElementById("diamondRow1").cloneNode(true);
           row1.id = `diamondRow${i}`;
@@ -870,9 +967,12 @@
             el.id = newId;
             if (el.tagName === "LABEL") el.setAttribute("for", newId);
           });
+          // update heading
+          const heading = row1.querySelector("h3");
+          if (heading) heading.textContent = `Diamond Type ${i}`;
           // reset values
           row1.querySelectorAll("input").forEach((inp) => (inp.value = "0"));
-          row1.querySelector("span[id]").textContent = "0.00";
+          row1.querySelector("span[id^='cost']").textContent = "0.00";
           document.getElementById("diamondInputsContainer").appendChild(row1);
         }
 
