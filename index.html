@@ -877,6 +877,7 @@
       }
 
       // ---------- Download PDF ----------
+      // ---------- Download PDF ----------
       async function downloadPDF() {
         const button = document.getElementById("downloadPdfButton");
         const originalText = button.innerHTML;
@@ -889,12 +890,48 @@
         try {
           const element = document.querySelector(".card");
 
+          // Temporarily replace inputs with divs for proper rendering
+          const inputs = element.querySelectorAll("input, select");
+          const inputReplacements = [];
+
+          inputs.forEach((input) => {
+            const div = document.createElement("div");
+            div.className = input.className;
+            div.style.cssText = window.getComputedStyle(input).cssText;
+            div.style.border = "1px solid #d1d5db";
+            div.style.padding = "0.6rem 0.5rem";
+            div.style.borderRadius = "0.5rem";
+            div.style.backgroundColor = "#ffffff";
+            div.style.minHeight = "2.5rem";
+            div.style.display = "flex";
+            div.style.alignItems = "center";
+
+            // Get display text
+            let displayText = "";
+            if (input.tagName === "SELECT") {
+              displayText = input.options[input.selectedIndex]?.text || "";
+            } else {
+              displayText = input.value || "";
+            }
+            div.textContent = displayText;
+
+            inputReplacements.push({ original: input, replacement: div });
+            input.parentNode.replaceChild(div, input);
+          });
+
           // Generate canvas from the card element
           const canvas = await html2canvas(element, {
             scale: 2,
             useCORS: true,
             logging: false,
             backgroundColor: "#ffffff",
+            windowWidth: element.scrollWidth,
+            windowHeight: element.scrollHeight,
+          });
+
+          // Restore original inputs
+          inputReplacements.forEach(({ original, replacement }) => {
+            replacement.parentNode.replaceChild(original, replacement);
           });
 
           // Get dimensions
@@ -938,7 +975,6 @@
           button.disabled = false;
         }
       }
-
       // ---------- Init ----------
       window.onload = function () {
         const sel = document.getElementById("goldKaratSelect");
