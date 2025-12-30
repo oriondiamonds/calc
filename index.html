@@ -351,7 +351,7 @@
           Profit & Cost Configuration
         </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="space-y-3 p-4 bg-white rounded-lg shadow-sm">
             <h3 class="font-semibold text-sm text-gray-700 border-b pb-2">
               Gold Making Charges (Rates per Gram)
@@ -451,18 +451,86 @@
               />
             </div>
           </div>
+
+          <!-- New Custom Fixed Costs -->
+          <div class="space-y-3 p-4 bg-white rounded-lg shadow-sm">
+            <h3 class="font-semibold text-sm text-gray-700 border-b pb-2">
+              Custom Fixed Costs
+            </h3>
+            <div>
+              <label
+                for="courierCost"
+                class="block text-xs font-medium text-gray-500 mb-1"
+              >
+                Courier Cost (₹)
+              </label>
+              <input
+                type="number"
+                id="courierCost"
+                value="700"
+                min="0"
+                oninput="calculatePrice()"
+                class="input-field w-full text-sm"
+                placeholder="e.g. 700"
+              />
+            </div>
+            <div>
+              <label
+                for="packagingCost"
+                class="block text-xs font-medium text-gray-500 mb-1"
+              >
+                Packaging Cost (₹)
+              </label>
+              <input
+                type="number"
+                id="packagingCost"
+                value="150"
+                min="0"
+                oninput="calculatePrice()"
+                class="input-field w-full text-sm"
+                placeholder="e.g. 150"
+              />
+            </div>
+            <div
+              class="pt-2 border-t border-gray-100 text-sm font-bold text-green-700"
+            >
+              Total Fixed (Courier + Pkg): ₹<span id="totalBaseFixed"
+                >850.00</span
+              >
+            </div>
+          </div>
         </div>
 
         <div class="mt-4 p-3 bg-green-100 rounded-lg text-sm text-green-800">
-          <p class="font-semibold">
-            Base Fixed Costs: ₹850.00
-            <span class="text-xs text-green-600"
-              >(Courier ₹700 + Pkg ₹150)</span
-            >
-          </p>
-          <p class="text-xs font-semibold text-green-800 mt-1">
+          <p class="text-xs font-semibold text-green-800">
             IGI Certification Charge: ₹900.00 (Applies if total diamond weight
             &lt; 1.0ct)
+          </p>
+        </div>
+      </div>
+
+      <!-- ==================== OPTIONAL IMAGE UPLOAD ==================== -->
+      <div class="mt-8 p-6 bg-amber-50 rounded-xl border border-amber-200">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 text-center">
+          Product Image (Optional)
+        </h2>
+        <div class="flex flex-col items-center">
+          <input
+            type="file"
+            id="productImageInput"
+            accept="image/*"
+            class="mb-4"
+          />
+          <div id="imagePreviewContainer" class="max-w-md w-full hidden">
+            <img
+              id="productImagePreview"
+              class="rounded-lg shadow-lg max-h-96 w-full object-contain"
+              alt="Product preview"
+            />
+          </div>
+          <p class="text-sm text-gray-600 mt-2">
+            Upload a design/photo of the jewellery (will appear in the quote &
+            PDF)
           </p>
         </div>
       </div>
@@ -640,6 +708,7 @@
       <p class="text-xs text-center text-gray-400 mt-6">
         Calculations use the selected gold purity for the final total.
       </p>
+
       <!-- ==================== DOWNLOAD PDF BUTTON ==================== -->
       <div class="mt-6 text-center">
         <button
@@ -651,7 +720,6 @@
         </button>
       </div>
     </div>
-    <!-- ==================== DOWNLOAD PDF BUTTON ==================== -->
 
     <!-- ==================== JAVASCRIPT ==================== -->
     <script>
@@ -668,11 +736,33 @@
         "10kt": 10 / 24,
         "9kt": 0.375,
       };
-      const BASE_FIXED_COSTS = 850;
       const IGI_CHARGE = 900;
       const GST_RATE = 0.03;
       const MAX_DIAMONDS = 5;
       let diamondCount = 1;
+
+      // ---------- Image Preview ----------
+      document
+        .getElementById("productImageInput")
+        .addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          const previewContainer = document.getElementById(
+            "imagePreviewContainer"
+          );
+          const previewImg = document.getElementById("productImagePreview");
+
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+              previewImg.src = ev.target.result;
+              previewContainer.classList.remove("hidden");
+            };
+            reader.readAsDataURL(file);
+          } else {
+            previewContainer.classList.add("hidden");
+            previewImg.src = "";
+          }
+        });
 
       // ---------- Add Diamond Row ----------
       function addDiamondRow() {
@@ -743,11 +833,19 @@
           }
         }
 
-        // ----- Fixed Costs & IGI -----
+        // ----- Custom Fixed Costs -----
+        const courierCost = getNum("courierCost");
+        const packagingCost = getNum("packagingCost");
+        const baseFixedCost = courierCost + packagingCost;
+
+        document.getElementById("totalBaseFixed").textContent =
+          formatCurrency(baseFixedCost);
+
+        // ----- IGI -----
         let igiApplied = 0;
-        let fixedBreakdown = `<li>Base (Courier + Pkg): ₹${formatCurrency(
-          BASE_FIXED_COSTS
-        )}</li>`;
+        let fixedBreakdown = `<li>Courier: ₹${formatCurrency(
+          courierCost
+        )}</li><li>Packaging: ₹${formatCurrency(packagingCost)}</li>`;
         if (totalCarats > 0 && totalCarats < 1) {
           igiApplied = IGI_CHARGE;
           fixedBreakdown += `<li class="text-green-600 font-semibold">IGI Certification (Carat &lt; 1.0): ₹${formatCurrency(
@@ -758,7 +856,7 @@
         } else {
           fixedBreakdown += `<li>IGI Not Applicable (No Diamonds)</li>`;
         }
-        const totalFixedCost = BASE_FIXED_COSTS + igiApplied;
+        const totalFixedCost = baseFixedCost + igiApplied;
 
         // ----- Totals -----
         const subtotal =
@@ -775,7 +873,6 @@
           makingPct = (totalMakingCharges / totalGoldCost) * 100;
 
         // ----- INTERNAL DISPLAY -----
-        // Gold
         document.getElementById("gold24ktValue").textContent =
           formatCurrency(goldValue24kt);
         ["9kt", "10kt", "14kt", "18kt"].forEach((k) => {
@@ -797,7 +894,6 @@
         document.getElementById("totalGoldCost").textContent =
           formatCurrency(totalGoldCost);
 
-        // Diamond
         document.getElementById("totalCarats").textContent =
           totalCarats.toFixed(2);
         document.getElementById("totalBaseDiamondValue").textContent =
@@ -807,7 +903,6 @@
         document.getElementById("totalDiamondCost").textContent =
           formatCurrency(finalDiamondPrice);
 
-        // Making
         document.getElementById("totalMakingCharges").textContent =
           formatCurrency(totalMakingCharges);
         document.getElementById("makingPercent").textContent =
@@ -815,13 +910,11 @@
         document.getElementById("customerMakingPercent").textContent =
           makingPct.toFixed(1);
 
-        // Fixed
         document.getElementById("fixedCostBreakdown").innerHTML =
           fixedBreakdown;
         document.getElementById("totalFixedCost").textContent =
           formatCurrency(totalFixedCost);
 
-        // Summary
         document.getElementById("subtotalBeforeGST").textContent =
           formatCurrency(subtotal);
         document.getElementById("gstValue").textContent = formatCurrency(gst);
@@ -838,18 +931,14 @@
         document.getElementById("customerMakingCharges").textContent =
           formatCurrency(totalMakingCharges);
 
-        // Diamond line includes fixed cost
-        const diamondWithFixed =
-          finalDiamondPrice + BASE_FIXED_COSTS + igiApplied;
+        const diamondWithFixed = finalDiamondPrice + baseFixedCost + igiApplied;
         document.getElementById("customerDiamondWithFixed").textContent =
           formatCurrency(diamondWithFixed);
 
-        // Carat inline comma list
         const caratListStr = caratList.length > 0 ? caratList.join(", ") : "-";
         document.getElementById("customerDiamondCarats").textContent =
           caratListStr;
 
-        // Same subtotal / GST / final as internal
         document.getElementById("customerSubtotalBeforeGST").textContent =
           formatCurrency(subtotal);
         document.getElementById("customerGstValue").textContent =
@@ -857,7 +946,7 @@
         document.getElementById("customerFinalTotalPrice").textContent =
           formatCurrency(finalTotal);
 
-        // ----- PRODUCT NAME (OPTIONAL) -----
+        // ----- PRODUCT NAME -----
         const productInputEl = document.getElementById("productName");
         if (productInputEl) {
           const productName = productInputEl.value.trim();
@@ -877,12 +966,10 @@
       }
 
       // ---------- Download PDF ----------
-      // ---------- Download PDF ----------
       async function downloadPDF() {
         const button = document.getElementById("downloadPdfButton");
         const originalText = button.innerHTML;
 
-        // Show loading state
         button.innerHTML =
           '<svg class="animate-spin h-5 w-5 mx-auto" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
         button.disabled = true;
@@ -890,7 +977,7 @@
         try {
           const element = document.querySelector(".card");
 
-          // Temporarily replace inputs with divs for proper rendering
+          // Temporarily replace inputs/selects with divs for clean PDF rendering
           const inputs = element.querySelectorAll("input, select");
           const inputReplacements = [];
 
@@ -906,7 +993,6 @@
             div.style.display = "flex";
             div.style.alignItems = "center";
 
-            // Get display text
             let displayText = "";
             if (input.tagName === "SELECT") {
               displayText = input.options[input.selectedIndex]?.text || "";
@@ -919,7 +1005,6 @@
             input.parentNode.replaceChild(div, input);
           });
 
-          // Generate canvas from the card element
           const canvas = await html2canvas(element, {
             scale: 2,
             useCORS: true,
@@ -929,14 +1014,13 @@
             windowHeight: element.scrollHeight,
           });
 
-          // Restore original inputs
+          // Restore inputs
           inputReplacements.forEach(({ original, replacement }) => {
             replacement.parentNode.replaceChild(original, replacement);
           });
 
-          // Get dimensions
-          const imgWidth = 210; // A4 width in mm
-          const pageHeight = 297; // A4 height in mm
+          const imgWidth = 210;
+          const pageHeight = 297;
           const imgHeight = (canvas.height * imgWidth) / canvas.width;
           let heightLeft = imgHeight;
 
@@ -945,11 +1029,9 @@
           const pdf = new jsPDF("p", "mm", "a4");
           let position = 0;
 
-          // Add first page
           pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
           heightLeft -= pageHeight;
 
-          // Add additional pages if needed
           while (heightLeft > 0) {
             position = heightLeft - imgHeight;
             pdf.addPage();
@@ -957,7 +1039,6 @@
             heightLeft -= pageHeight;
           }
 
-          // Get product name for filename
           const productName = document
             .getElementById("productName")
             .value.trim();
@@ -970,11 +1051,11 @@
           console.error("Error generating PDF:", error);
           alert("Error generating PDF. Please try again.");
         } finally {
-          // Restore button
           button.innerHTML = originalText;
           button.disabled = false;
         }
       }
+
       // ---------- Init ----------
       window.onload = function () {
         const sel = document.getElementById("goldKaratSelect");
@@ -985,17 +1066,14 @@
           const row1 = document.getElementById("diamondRow1").cloneNode(true);
           row1.id = `diamondRow${i}`;
           row1.classList.add("hidden");
-          // update ids
           row1.querySelectorAll("[id]").forEach((el) => {
             const oldId = el.id;
             const newId = oldId.replace(/\d+$/, i);
             el.id = newId;
             if (el.tagName === "LABEL") el.setAttribute("for", newId);
           });
-          // update heading
           const heading = row1.querySelector("h3");
           if (heading) heading.textContent = `Diamond Type ${i}`;
-          // reset values
           row1.querySelectorAll("input").forEach((inp) => (inp.value = "0"));
           row1.querySelector("span[id^='cost']").textContent = "0.00";
           document.getElementById("diamondInputsContainer").appendChild(row1);
