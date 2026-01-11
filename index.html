@@ -158,6 +158,7 @@
               onchange="calculatePrice()"
               class="input-field w-full bg-white"
             >
+              <option value="22kt">22kt (91.67%)</option>
               <option value="14kt">14kt (58.33%)</option>
               <option value="18kt">18kt (75%)</option>
               <option value="10kt">10kt (41.67%)</option>
@@ -192,6 +193,9 @@
                 14kt Value: ₹<span id="gold14ktValue">0.00</span> (58.33%)
               </li>
               <li>18kt Value: ₹<span id="gold18ktValue">0.00</span> (75%)</li>
+              <li>
+                22kt Value: ₹<span id="gold22ktValue">0.00</span> (91.67%)
+              </li>
             </ul>
           </div>
         </div>
@@ -731,6 +735,7 @@
         "24kt": 1.0,
         "18kt": 0.75,
         "14kt": 14 / 24,
+        "22kt": 22 / 24,
         "10kt": 10 / 24,
         "9kt": 0.375,
       };
@@ -873,7 +878,7 @@
         // ----- INTERNAL DISPLAY -----
         document.getElementById("gold24ktValue").textContent =
           formatCurrency(goldValue24kt);
-        ["9kt", "10kt", "14kt", "18kt"].forEach((k) => {
+        ["9kt", "10kt", "14kt", "18kt", "22kt"].forEach((k) => {
           document.getElementById(`gold${k}Value`).textContent = formatCurrency(
             goldValues[k]
           );
