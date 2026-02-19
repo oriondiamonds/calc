@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -17,7 +17,8 @@
         background-color: #f7f3f0;
       }
       .card {
-        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1),
+        box-shadow:
+          0 10px 25px -3px rgba(0, 0, 0, 0.1),
           0 4px 6px -2px rgba(0, 0, 0, 0.05);
         border-radius: 1.5rem;
         background-color: #ffffff;
@@ -52,6 +53,18 @@
       .animate-spin {
         animation: spin 1s linear infinite;
       }
+      @keyframes pulse-green {
+        0%,
+        100% {
+          background-color: #d1fae5;
+        }
+        50% {
+          background-color: #6ee7b7;
+        }
+      }
+      .live-rate-success {
+        animation: pulse-green 1s ease-in-out 2;
+      }
       @media (max-width: 640px) {
         .grid-3-label {
           font-size: 0.7rem;
@@ -65,10 +78,37 @@
   <body class="p-4 md:p-8 min-h-screen flex items-start justify-center">
     <div class="card w-full max-w-5xl p-6 md:p-10 my-8">
       <h1
-        class="text-3xl md:text-4xl font-extrabold text-[#b45f06] mb-4 text-center"
+        class="text-3xl md:text-4xl font-extrabold text-[#b45f06] mb-2 text-center"
       >
         Jewelry Pricing Tool (₹)
       </h1>
+
+      <!-- LIVE RATE FETCH BUTTON -->
+      <div class="mb-6 flex flex-col items-center gap-2">
+        <button
+          id="fetchRatesBtn"
+          onclick="fetchLiveRates()"
+          class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg shadow transition duration-150"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
+          </svg>
+          Fetch Live Rates (Navkar Gold)
+        </button>
+        <p id="liveRateStatus" class="text-xs text-gray-400 italic">
+          Rates not yet fetched. Using manual entries below.
+        </p>
+      </div>
 
       <!-- PRODUCT NAME (OPTIONAL) -->
       <div class="mb-6">
@@ -87,8 +127,9 @@
         />
       </div>
 
-      <!-- ==================== GOLD ==================== -->
+      <!-- ==================== GOLD + SILVER ROW ==================== -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- ======= GOLD ======= -->
         <div class="space-y-6 p-4 bg-yellow-50 rounded-xl">
           <h2
             class="text-xl font-bold text-gray-800 border-b pb-2 mb-4 flex items-center"
@@ -104,7 +145,7 @@
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="M11.049 2.5a1.5 1.5 0 011.902 0l1.519 1.348a1.5 1.5 0 001.21.359l2.09-.442a1.5 1.5 0 011.59 1.73l-.442 2.09a1.5 1.5 0 00.359 1.21l1.348 1.519a1.5 1.5 0 010 1.902l-1.348 1.519a1.5 1.5 0 00-.359 1.21l.442 2.09a1.5 1.5 0 01-1.59 1.73l-2.09-.442a1.5 1.5 0 00-1.21.359l-1.519 1.348a1.5 1.5 0 01-1.902 0l-1.519-1.348a1.5 1.5 0 00-1.21-.359l-2.09.442a1.5 1.5 0 01-1.59-1.73l.442-2.09a1.5 1.5 0 00-.359-1.21l-1.348-1.519a1.5 1.5 0 010-1.902l1.348-1.519a1.5 1.5 0 00.359-1.21l-.442-2.09a1.5 1.5 0 011.59-1.73l2.09.442a1.5 1.5 0 001.21-.359l1.519-1.348z"
-              ></path>
+              />
             </svg>
             Gold Component
           </h2>
@@ -200,7 +241,7 @@
           </div>
         </div>
 
-        <!-- ==================== DIAMOND ==================== -->
+        <!-- ======= DIAMOND ======= -->
         <div class="space-y-4 p-4 bg-blue-50 rounded-xl">
           <h2
             class="text-xl font-bold text-gray-800 border-b pb-2 mb-2 flex items-center"
@@ -216,7 +257,7 @@
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="M5 3v4M3 5h4M6 17v4M17 3v4M21 5h-4M7 3H3v18h18V3h-4M5 13H3v-2h2v2zm14 0h2v-2h-2v2zm-7 0v-2h2v2h-2zm0 4h2v-2h-2v2zm0-8h2V7h-2v2zm-4 0h2V7h-2v2zm8 0h2V7h-2v2z"
-              ></path>
+              />
             </svg>
             Diamond Component (Max 5 Types)
           </h2>
@@ -286,7 +327,6 @@
                 Cost (incl. margin): ₹<span id="cost1">0.00</span>
               </p>
             </div>
-            <!-- Rows 2-5 will be cloned via JS -->
           </div>
 
           <button
@@ -305,7 +345,7 @@
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
+              />
             </svg>
             <span>Add Another Diamond Type</span>
           </button>
@@ -334,6 +374,137 @@
         </div>
       </div>
 
+      <!-- ==================== SILVER COMPONENT ==================== -->
+      <div class="mt-6 p-5 bg-slate-50 rounded-xl border border-slate-200">
+        <h2
+          class="text-xl font-bold text-gray-800 border-b pb-2 mb-4 flex items-center"
+        >
+          <!-- Silver icon -->
+          <svg
+            class="w-6 h-6 mr-2 text-slate-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3C8 3 5 6.5 5 10c0 2.5 1.3 4.7 3.3 5.9L7 20h10l-1.3-4.1C17.7 14.7 19 12.5 19 10c0-3.5-3-7-7-7z"
+            />
+          </svg>
+          Silver Component
+          <span
+            class="ml-3 text-xs font-normal text-slate-500 bg-slate-200 px-2 py-0.5 rounded-full"
+          >
+            Optional — leave weight as 0 to skip
+          </span>
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Silver Price per gram -->
+          <div>
+            <label
+              for="currentSilverPrice"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Silver Price (₹ per gram)
+            </label>
+            <div class="relative">
+              <input
+                type="number"
+                id="currentSilverPrice"
+                value="95"
+                min="0"
+                step="0.01"
+                oninput="calculatePrice()"
+                class="input-field w-full pr-16"
+                placeholder="e.g. 95"
+              />
+              <span
+                id="silverLiveBadge"
+                class="absolute right-2 top-1/2 -translate-y-1/2 hidden text-[10px] font-bold bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full"
+              >
+                LIVE
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">
+              Live rate from navkargold.com:
+              <span id="silverLiveRate" class="font-semibold text-slate-600"
+                >—</span
+              >
+            </p>
+          </div>
+
+          <!-- Silver Weight -->
+          <div>
+            <label
+              for="silverWeight"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Silver Weight (grams)
+            </label>
+            <input
+              type="number"
+              id="silverWeight"
+              value="0"
+              min="0"
+              step="0.01"
+              oninput="calculatePrice()"
+              class="input-field w-full"
+              placeholder="e.g. 20"
+            />
+          </div>
+
+          <!-- Silver Making Charge Rate -->
+          <div>
+            <label
+              for="silverMakingRate"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Silver Making Charge (₹ per gram)
+            </label>
+            <input
+              type="number"
+              id="silverMakingRate"
+              value="50"
+              min="0"
+              oninput="calculatePrice()"
+              class="input-field w-full"
+              placeholder="e.g. 50"
+            />
+          </div>
+        </div>
+
+        <!-- Silver Summary -->
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="p-3 bg-white rounded-lg border border-slate-200 text-sm">
+            <span class="text-slate-500 block text-xs mb-1"
+              >Silver Metal Value</span
+            >
+            <span class="font-bold text-slate-800"
+              >₹<span id="silverMetalValue">0.00</span></span
+            >
+          </div>
+          <div class="p-3 bg-white rounded-lg border border-slate-200 text-sm">
+            <span class="text-slate-500 block text-xs mb-1"
+              >Silver Making Charges</span
+            >
+            <span class="font-bold text-slate-800"
+              >₹<span id="silverMakingValue">0.00</span></span
+            >
+          </div>
+          <div class="p-3 bg-slate-700 rounded-lg text-sm">
+            <span class="text-slate-300 block text-xs mb-1"
+              >Total Silver Cost</span
+            >
+            <span class="font-bold text-white"
+              >₹<span id="totalSilverCost">0.00</span></span
+            >
+          </div>
+        </div>
+      </div>
+
       <!-- ==================== PROFIT & COST CONFIG ==================== -->
       <div class="mt-8 p-6 bg-green-50 rounded-xl border border-green-200">
         <h2
@@ -350,7 +521,7 @@
               stroke-linejoin="round"
               stroke-width="2"
               d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2h-2m0 0h-2m-2 0h2m0 0v-2m0 2v2m0 0h2m0 0h2m-2 0v2m0 0V8m0 4h2m0 0h2m-2 0v2m0 0V8m0 4h2m0 0h2m-2 0v2m0 0V8m-2 8c0 1.657-1.343 3-3 3s-3-1.343-3-3m0 0V8m0 4h2m0 0h2m-2 0v2m0 0V8"
-            ></path>
+            />
           </svg>
           Profit & Cost Configuration
         </h2>
@@ -456,7 +627,6 @@
             </div>
           </div>
 
-          <!-- New Custom Fixed Costs -->
           <div class="space-y-3 p-4 bg-white rounded-lg shadow-sm">
             <h3 class="font-semibold text-sm text-gray-700 border-b pb-2">
               Custom Fixed Costs
@@ -465,9 +635,8 @@
               <label
                 for="courierCost"
                 class="block text-xs font-medium text-gray-500 mb-1"
+                >Courier Cost (₹)</label
               >
-                Courier Cost (₹)
-              </label>
               <input
                 type="number"
                 id="courierCost"
@@ -482,9 +651,8 @@
               <label
                 for="packagingCost"
                 class="block text-xs font-medium text-gray-500 mb-1"
+                >Packaging Cost (₹)</label
               >
-                Packaging Cost (₹)
-              </label>
               <input
                 type="number"
                 id="packagingCost"
@@ -522,24 +690,42 @@
         <div class="space-y-3 pt-4 border-t border-gray-200">
           <div class="flex justify-between items-center text-lg">
             <span class="font-semibold text-gray-700">
-              1. Total Gold Value (
-              <span id="selectedKaratSummary">14kt</span>,
-              <span id="goldWeightSummary">0.00</span> gm ):
+              1. Total Gold Value (<span id="selectedKaratSummary">14kt</span>,
+              <span id="goldWeightSummary">0.00</span> gm):
             </span>
             <span class="font-bold text-yellow-800"
               >₹<span id="totalGoldCost">0.00</span></span
             >
           </div>
+
+          <!-- Silver row (hidden if 0) -->
+          <div
+            id="summaryRow_silver"
+            class="flex justify-between items-center text-lg"
+          >
+            <span class="font-semibold text-gray-700">
+              2. Total Silver Value (<span id="summaryRow_silverWeight"
+                >0.00</span
+              >
+              gm):
+            </span>
+            <span class="font-bold text-slate-700"
+              >₹<span id="summaryRow_silverCost">0.00</span></span
+            >
+          </div>
+
           <div class="flex justify-between items-center text-lg">
             <span class="font-semibold text-gray-700"
-              >2. Total Diamond Value (incl. Margin):</span
+              >3. Total Diamond Value (incl. Margin):</span
             >
             <span class="font-bold text-blue-800"
               >₹<span id="totalDiamondCost">0.00</span></span
             >
           </div>
           <div class="flex justify-between items-center text-lg">
-            <span class="font-semibold text-gray-700">3. Making Charges:</span>
+            <span class="font-semibold text-gray-700"
+              >4. Making Charges (Gold):</span
+            >
             <span class="font-bold text-gray-800">
               ₹<span id="totalMakingCharges">0.00</span> (<span
                 id="makingPercent"
@@ -551,7 +737,7 @@
           <div class="space-y-1">
             <div class="flex justify-between items-center text-lg">
               <span class="font-semibold text-gray-700"
-                >4. Total Fixed Costs:</span
+                >5. Total Fixed Costs:</span
               >
               <span class="font-bold text-gray-800"
                 >₹<span id="totalFixedCost">0.00</span></span
@@ -571,7 +757,6 @@
               >₹<span id="subtotalBeforeGST">0.00</span></span
             >
           </div>
-
           <div class="flex justify-between items-center text-xl">
             <span class="font-bold text-red-600">3% GST:</span>
             <span class="font-extrabold text-red-700"
@@ -589,6 +774,7 @@
           </div>
         </div>
       </div>
+
       <!-- ==================== OPTIONAL IMAGE UPLOAD ==================== -->
       <div class="mt-8 p-6 bg-amber-50 rounded-xl border border-amber-200">
         <h2 class="text-xl font-bold text-gray-800 mb-4 text-center">
@@ -614,6 +800,7 @@
           </p>
         </div>
       </div>
+
       <!-- ==================== CUSTOMER QUOTE ==================== -->
       <div
         class="mt-8 p-6 bg-yellow-50 rounded-xl border-4 border-dashed border-gray-200"
@@ -632,13 +819,12 @@
               stroke-linejoin="round"
               stroke-width="2"
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            ></path>
+            />
           </svg>
           Customer Final Quote Summary
         </h2>
 
         <div class="space-y-3 pt-4">
-          <!-- Product row only shown if filled -->
           <div
             id="customerProductRow"
             class="flex justify-between items-center text-lg hidden"
@@ -652,18 +838,30 @@
 
           <div class="flex justify-between items-center text-lg">
             <span class="font-semibold text-gray-700">
-              1. Gold Value (
-              <span id="customerKaratSummary">14kt</span>,
-              <span id="customerGoldWeightSummary">0.00</span> gm ):
+              1. Gold Value (<span id="customerKaratSummary">14kt</span>,
+              <span id="customerGoldWeightSummary">0.00</span> gm):
             </span>
             <span class="font-bold text-yellow-800"
               >₹<span id="customerGoldCost">0.00</span></span
             >
           </div>
 
+          <!-- Customer Silver row -->
+          <div
+            id="customerSilverRow"
+            class="flex justify-between items-center text-lg hidden"
+          >
+            <span class="font-semibold text-gray-700">
+              2. Silver Value (<span id="customerSilverWeight">0.00</span> gm):
+            </span>
+            <span class="font-bold text-slate-700"
+              >₹<span id="customerSilverCost">0.00</span></span
+            >
+          </div>
+
           <div class="flex justify-between items-center text-lg">
             <span class="font-semibold text-gray-700">
-              2. Diamond Value (<span id="customerDiamondCarats">-</span>):
+              3. Diamond Value (<span id="customerDiamondCarats">-</span>):
             </span>
             <span class="font-bold text-blue-800"
               >₹<span id="customerDiamondWithFixed">0.00</span></span
@@ -671,13 +869,12 @@
           </div>
 
           <div class="flex justify-between items-center text-lg">
-            <span class="font-semibold text-gray-700"
-              >3. Making Charges(<span id="customerMakingPercent">0.0</span
-              >%):</span
-            >
-            <span class="font-bold text-gray-800"
-              >₹<span id="customerMakingCharges">0.00</span>
+            <span class="font-semibold text-gray-700">
+              4. Making Charges(<span id="customerMakingPercent">0.0</span>%):
             </span>
+            <span class="font-bold text-gray-800"
+              >₹<span id="customerMakingCharges">0.00</span></span
+            >
           </div>
 
           <div class="h-px bg-gray-300 my-4"></div>
@@ -688,14 +885,12 @@
               >₹<span id="customerSubtotalBeforeGST">0.00</span></span
             >
           </div>
-
           <div class="flex justify-between items-center text-xl">
             <span class="font-bold text-red-600">3% GST:</span>
             <span class="font-extrabold text-red-700"
               >₹<span id="customerGstValue">0.00</span></span
             >
           </div>
-
           <div
             class="flex justify-between items-center text-xl p-3 bg-gray-800 text-white rounded-lg mt-4"
           >
@@ -744,16 +939,216 @@
       const MAX_DIAMONDS = 5;
       let diamondCount = 1;
 
+      // ---------- Live Rate Fetch ----------
+      async function fetchLiveRates() {
+        const btn = document.getElementById("fetchRatesBtn");
+        const statusEl = document.getElementById("liveRateStatus");
+        const originalText = btn.innerHTML;
+
+        btn.innerHTML = `<svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg> Fetching…`;
+        btn.disabled = true;
+        statusEl.textContent = "Fetching live rates from navkargold.com…";
+        statusEl.className = "text-xs text-blue-500 italic";
+
+        try {
+          // Fetch from XML API endpoint
+          const apiUrl =
+            "https://bcast.navkargold.com:7768/VOTSBroadcastStreaming/Services/xml/GetLiveRateByTemplateID/navkar?_=" +
+            Date.now();
+
+          const resp = await fetch(apiUrl);
+          if (!resp.ok) throw new Error("Network error");
+          const xmlText = await resp.text();
+
+          // DEBUG: Log the raw response
+          console.log("=== RAW API RESPONSE ===");
+          console.log(xmlText);
+          console.log("=== END RAW RESPONSE ===");
+
+          let silverRateInr = null;
+          let goldRateInr = null;
+
+          // The API returns XML with <string> tags containing tab-separated data
+          // Parse both as XML and as plain text to handle different formats
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+
+          // Try XML parsing first
+          const stringElements = xmlDoc.getElementsByTagName("string");
+          const lines = [];
+
+          if (stringElements.length > 0) {
+            // Extract text from XML <string> elements
+            console.log(
+              "Found",
+              stringElements.length,
+              "XML <string> elements",
+            );
+            for (let i = 0; i < stringElements.length; i++) {
+              const content = stringElements[i].textContent.trim();
+              if (content) {
+                console.log(`String element ${i}:`, content);
+                lines.push(content);
+              }
+            }
+          } else {
+            // Fallback: treat as plain text with line breaks
+            console.log(
+              "No XML <string> elements found, parsing as plain text",
+            );
+            const textLines = xmlText.split(/[\r\n]+/);
+            textLines.forEach((line, idx) => {
+              const trimmed = line.trim();
+              if (
+                trimmed &&
+                !trimmed.startsWith("<") &&
+                !trimmed.startsWith("<?")
+              ) {
+                console.log(`Text line ${idx}:`, trimmed);
+                lines.push(trimmed);
+              }
+            });
+          }
+
+          console.log("Total lines to process:", lines.length);
+
+          // Process each line looking for gold and silver data
+          for (const line of lines) {
+            // Split by actual tabs - the \t in the string needs to be interpreted
+            // Replace literal \t with actual tab character first
+            const normalizedLine = line.replace(/\\t/g, "\t");
+            const parts = normalizedLine
+              .split("\t")
+              .map((p) => p.trim())
+              .filter((p) => p.length > 0);
+
+            console.log("Processing line parts:", parts);
+
+            if (parts.length >= 3) {
+              const id = parts[0];
+              const name = parts[1];
+
+              console.log(`Checking ID=${id}, Name=${name}`);
+
+              // SILVER COSTING (ID: 7543) - use first price value
+              // Example: 7543	SILVER COSTING	242790	242997	248590	240113
+              if (id === "7543" && name.toUpperCase().includes("SILVER")) {
+                const silverCostingPerKg = parseFloat(parts[2]);
+                console.log(
+                  "Found SILVER COSTING:",
+                  silverCostingPerKg,
+                  "₹/kg",
+                );
+                if (!isNaN(silverCostingPerKg) && silverCostingPerKg > 0) {
+                  // Convert from ₹/kg to ₹/gram
+                  silverRateInr = silverCostingPerKg / 1000;
+                  console.log("Silver rate set to:", silverRateInr, "₹/gram");
+                }
+              }
+
+              // GOLD COSTING (ID: 9054) - use first price value
+              // Example: 9054	GOLD COSTING 	155829	155864	157185	155132
+              if (id === "9054" && name.toUpperCase().includes("GOLD")) {
+                const goldCostingPer10g = parseFloat(parts[2]);
+                console.log("Found GOLD COSTING:", goldCostingPer10g, "₹/10g");
+                if (!isNaN(goldCostingPer10g) && goldCostingPer10g > 0) {
+                  // Convert from ₹/10g to ₹/gram
+                  goldRateInr = goldCostingPer10g / 10;
+                  console.log("Gold rate set to:", goldRateInr, "₹/gram");
+                }
+              }
+            }
+          }
+
+          // Update the UI
+          if (silverRateInr && silverRateInr > 0) {
+            const silverField = document.getElementById("currentSilverPrice");
+            silverField.value = silverRateInr.toFixed(2);
+            document.getElementById("silverLiveRate").textContent =
+              "₹" + formatCurrency(silverRateInr) + " / gram";
+            document
+              .getElementById("silverLiveBadge")
+              .classList.remove("hidden");
+
+            // Flash animation
+            silverField.classList.add("live-rate-success");
+            setTimeout(
+              () => silverField.classList.remove("live-rate-success"),
+              2000,
+            );
+          }
+
+          if (goldRateInr && goldRateInr > 0) {
+            const goldField = document.getElementById("currentGoldPrice");
+            goldField.value = goldRateInr.toFixed(2);
+
+            goldField.classList.add("live-rate-success");
+            setTimeout(
+              () => goldField.classList.remove("live-rate-success"),
+              2000,
+            );
+          }
+
+          const gotSilver = silverRateInr && silverRateInr > 0;
+          const gotGold = goldRateInr && goldRateInr > 0;
+
+          // Log for debugging
+          console.log("Parsed rates:", {
+            goldRateInr,
+            silverRateInr,
+            linesProcessed: lines.length,
+          });
+
+          if (gotSilver || gotGold) {
+            const parts = [];
+            if (gotGold)
+              parts.push("Gold: ₹" + formatCurrency(goldRateInr) + "/g");
+            if (gotSilver)
+              parts.push("Silver: ₹" + formatCurrency(silverRateInr) + "/g");
+            statusEl.textContent =
+              "✅ Live rates updated — " +
+              parts.join("  |  ") +
+              "  (from navkargold.com, " +
+              new Date().toLocaleTimeString() +
+              ")";
+            statusEl.className = "text-xs text-emerald-600 font-medium";
+          } else {
+            // More helpful error message
+            console.error(
+              "Could not parse rates. Sample data:",
+              lines.slice(0, 3),
+            );
+            throw new Error(
+              "Could not parse rates from API. Check console for details.",
+            );
+          }
+
+          calculatePrice();
+        } catch (err) {
+          console.error("Live rate fetch error:", err);
+          statusEl.textContent =
+            "⚠️ Could not fetch live rates. Check your internet or update manually. (" +
+            err.message +
+            ")";
+          statusEl.className = "text-xs text-red-500";
+        } finally {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      }
+
       // ---------- Image Preview ----------
       document
         .getElementById("productImageInput")
         .addEventListener("change", function (e) {
           const file = e.target.files[0];
           const previewContainer = document.getElementById(
-            "imagePreviewContainer"
+            "imagePreviewContainer",
           );
           const previewImg = document.getElementById("productImagePreview");
-
           if (file) {
             const reader = new FileReader();
             reader.onload = function (ev) {
@@ -793,11 +1188,47 @@
           goldValues[kt] = goldValue24kt * GOLD_PURITY[kt];
         const totalGoldCost = goldValues[selectedKarat];
 
-        // ----- Making Charges -----
+        // ----- Silver -----
+        const silverPricePerGram = getNum("currentSilverPrice");
+        const silverWeight = getNum("silverWeight");
+        const silverMakingRate = getNum("silverMakingRate");
+        const silverMetalValue = silverPricePerGram * silverWeight;
+        const silverMakingValue = silverMakingRate * silverWeight;
+        const totalSilverCost = silverMetalValue + silverMakingValue;
+
+        // Update silver UI
+        document.getElementById("silverMetalValue").textContent =
+          formatCurrency(silverMetalValue);
+        document.getElementById("silverMakingValue").textContent =
+          formatCurrency(silverMakingValue);
+        document.getElementById("totalSilverCost").textContent =
+          formatCurrency(totalSilverCost);
+
+        // Show/hide silver rows in summaries
+        const hasSilver = silverWeight > 0;
+        document.getElementById("summaryRow_silver").style.display = hasSilver
+          ? ""
+          : "none";
+        document.getElementById("summaryRow_silverWeight").textContent =
+          silverWeight.toFixed(2);
+        document.getElementById("summaryRow_silverCost").textContent =
+          formatCurrency(totalSilverCost);
+
+        const customerSilverRow = document.getElementById("customerSilverRow");
+        if (hasSilver) {
+          customerSilverRow.classList.remove("hidden");
+        } else {
+          customerSilverRow.classList.add("hidden");
+        }
+        document.getElementById("customerSilverWeight").textContent =
+          silverWeight.toFixed(2);
+        document.getElementById("customerSilverCost").textContent =
+          formatCurrency(totalSilverCost);
+
+        // ----- Making Charges (Gold) -----
         const rateHigh = getNum("makingChargeRateHigh");
         const rateLow = getNum("makingChargeRateLow");
         const makingMarginPct = getNum("makingChargeMargin") / 100;
-
         const makingRate =
           goldWeight > 2 ? rateLow : goldWeight > 0 ? rateHigh : 0;
         const baseMaking = goldWeight * makingRate;
@@ -816,19 +1247,15 @@
           const carat = getNum(`carat${i}`);
           const price = getNum(`price${i}`);
           const qty = getNum(`qty${i}`);
-
           if (carat > 0 && price > 0 && qty > 0) {
             const rowCarats = carat * qty;
             const baseRow = rowCarats * price;
             const marginPct = carat >= 1 ? marginLargePct : marginSmallPct;
             const rowFinal = baseRow * (1 + marginPct);
-
             totalCarats += rowCarats;
             totalBaseDiamond += baseRow;
             finalDiamondPrice += rowFinal;
-
             caratList.push(qty + "-" + carat.toFixed(2) + "ct");
-
             document.getElementById(`cost${i}`).textContent =
               formatCurrency(rowFinal);
           } else {
@@ -840,20 +1267,15 @@
         const courierCost = getNum("courierCost");
         const packagingCost = getNum("packagingCost");
         const baseFixedCost = courierCost + packagingCost;
-
         document.getElementById("totalBaseFixed").textContent =
           formatCurrency(baseFixedCost);
 
         // ----- IGI -----
         let igiApplied = 0;
-        let fixedBreakdown = `<li>Courier: ₹${formatCurrency(
-          courierCost
-        )}</li><li>Packaging: ₹${formatCurrency(packagingCost)}</li>`;
+        let fixedBreakdown = `<li>Courier: ₹${formatCurrency(courierCost)}</li><li>Packaging: ₹${formatCurrency(packagingCost)}</li>`;
         if (totalCarats > 0 && totalCarats < 1) {
           igiApplied = IGI_CHARGE;
-          fixedBreakdown += `<li class="text-green-600 font-semibold">IGI Certification (Carat &lt; 1.0): ₹${formatCurrency(
-            IGI_CHARGE
-          )}</li>`;
+          fixedBreakdown += `<li class="text-green-600 font-semibold">IGI Certification (Carat &lt; 1.0): ₹${formatCurrency(IGI_CHARGE)}</li>`;
         } else if (totalCarats >= 1) {
           fixedBreakdown += `<li class="text-red-500 italic">IGI Not Applied (Carat ≥ 1.0)</li>`;
         } else {
@@ -861,16 +1283,17 @@
         }
         const totalFixedCost = baseFixedCost + igiApplied;
 
-        // ----- Totals -----
+        // ----- Grand Totals -----
         const subtotal =
           totalGoldCost +
+          totalSilverCost +
           finalDiamondPrice +
           totalMakingCharges +
           totalFixedCost;
         const gst = subtotal * GST_RATE;
         const finalTotal = subtotal + gst;
 
-        // ----- Making % of Gold -----
+        // Making % of Gold
         let makingPct = 0;
         if (totalGoldCost > 0)
           makingPct = (totalMakingCharges / totalGoldCost) * 100;
@@ -880,7 +1303,7 @@
           formatCurrency(goldValue24kt);
         ["9kt", "10kt", "14kt", "18kt", "22kt"].forEach((k) => {
           document.getElementById(`gold${k}Value`).textContent = formatCurrency(
-            goldValues[k]
+            goldValues[k],
           );
         });
 
@@ -937,11 +1360,8 @@
         const diamondWithFixed = finalDiamondPrice + baseFixedCost + igiApplied;
         document.getElementById("customerDiamondWithFixed").textContent =
           formatCurrency(diamondWithFixed);
-
-        const caratListStr = caratList.length > 0 ? caratList.join(", ") : "-";
         document.getElementById("customerDiamondCarats").textContent =
-          caratListStr;
-
+          caratList.length > 0 ? caratList.join(", ") : "-";
         document.getElementById("customerSubtotalBeforeGST").textContent =
           formatCurrency(subtotal);
         document.getElementById("customerGstValue").textContent =
@@ -955,9 +1375,8 @@
           const productName = productInputEl.value.trim();
           const productRow = document.getElementById("customerProductRow");
           const productNameSpan = document.getElementById(
-            "customerProductName"
+            "customerProductName",
           );
-
           if (productName.length > 0) {
             productRow.classList.remove("hidden");
             productNameSpan.textContent = productName;
@@ -972,18 +1391,13 @@
       async function downloadPDF() {
         const button = document.getElementById("downloadPdfButton");
         const originalText = button.innerHTML;
-
         button.innerHTML =
           '<svg class="animate-spin h-5 w-5 mx-auto" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
         button.disabled = true;
-
         try {
           const element = document.querySelector(".card");
-
-          // Temporarily replace inputs/selects with divs for clean PDF rendering
           const inputs = element.querySelectorAll("input, select");
           const inputReplacements = [];
-
           inputs.forEach((input) => {
             const div = document.createElement("div");
             div.className = input.className;
@@ -995,7 +1409,6 @@
             div.style.minHeight = "2.5rem";
             div.style.display = "flex";
             div.style.alignItems = "center";
-
             let displayText = "";
             if (input.tagName === "SELECT") {
               displayText = input.options[input.selectedIndex]?.text || "";
@@ -1003,11 +1416,9 @@
               displayText = input.value || "";
             }
             div.textContent = displayText;
-
             inputReplacements.push({ original: input, replacement: div });
             input.parentNode.replaceChild(div, input);
           });
-
           const canvas = await html2canvas(element, {
             scale: 2,
             useCORS: true,
@@ -1016,39 +1427,31 @@
             windowWidth: element.scrollWidth,
             windowHeight: element.scrollHeight,
           });
-
-          // Restore inputs
           inputReplacements.forEach(({ original, replacement }) => {
             replacement.parentNode.replaceChild(original, replacement);
           });
-
-          const imgWidth = 210;
-          const pageHeight = 297;
+          const imgWidth = 210,
+            pageHeight = 297;
           const imgHeight = (canvas.height * imgWidth) / canvas.width;
           let heightLeft = imgHeight;
-
           const imgData = canvas.toDataURL("image/png");
           const { jsPDF } = window.jspdf;
           const pdf = new jsPDF("p", "mm", "a4");
           let position = 0;
-
           pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
           heightLeft -= pageHeight;
-
           while (heightLeft > 0) {
             position = heightLeft - imgHeight;
             pdf.addPage();
             pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
             heightLeft -= pageHeight;
           }
-
           const productName = document
             .getElementById("productName")
             .value.trim();
           const filename = productName
             ? `${productName.replace(/[^a-z0-9]/gi, "_")}_Jewelry_Quote.pdf`
             : "Jewelry_Price_Quote.pdf";
-
           pdf.save(filename);
         } catch (error) {
           console.error("Error generating PDF:", error);
