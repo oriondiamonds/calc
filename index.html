@@ -1462,6 +1462,108 @@
         }
       }
 
+      function applyUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+
+        const productName = params.get("name");
+        if (productName !== null) {
+          const productInput = document.getElementById("productName");
+          if (productInput) {
+            productInput.value = productName;
+          }
+        }
+
+        const goldWeight = params.get("gold_weight");
+        if (goldWeight !== null) {
+          const parsedWeight = parseFloat(goldWeight);
+          if (!Number.isNaN(parsedWeight) && parsedWeight >= 0) {
+            const goldWeightInput = document.getElementById("goldWeight");
+            if (goldWeightInput) {
+              goldWeightInput.value = parsedWeight.toString();
+            }
+          }
+        }
+
+        const goldPurity = params.get("gold_purity");
+        const goldKarat = params.get("gold_karat");
+        const purityValue = goldPurity ?? goldKarat;
+
+        if (purityValue) {
+          const normalized = String(purityValue)
+            .toLowerCase()
+            .replace(/\s+/g, "")
+            .replace(/k$/, "kt");
+
+          const options = ["24kt", "22kt", "18kt", "14kt", "10kt", "9kt"];
+          const matchedKarat = options.find((option) => {
+            const optionNormalized = option.toLowerCase().replace(/\s+/g, "");
+            return (
+              normalized === optionNormalized ||
+              normalized === optionNormalized.replace(/kt$/, "") ||
+              normalized === optionNormalized.replace(/kt$/, "k")
+            );
+          });
+
+          if (matchedKarat) {
+            const goldKaratSelect = document.getElementById("goldKaratSelect");
+            if (goldKaratSelect) {
+              goldKaratSelect.value = matchedKarat;
+            }
+          }
+        }
+
+        const diamondsParam = params.get("diamonds");
+        if (diamondsParam) {
+          try {
+            const diamonds = JSON.parse(diamondsParam);
+            if (Array.isArray(diamonds)) {
+              const rowsToUse = diamonds.slice(0, MAX_DIAMONDS);
+              rowsToUse.forEach((diamond, index) => {
+                const rowIndex = index + 1;
+                const row = document.getElementById(`diamondRow${rowIndex}`);
+                if (!row) return;
+                row.classList.remove("hidden");
+
+                const caratValue = Number(diamond.carat);
+                const qtyValue = Number(diamond.qty);
+                const priceValue = Number(diamond.price);
+
+                const caratInput = document.getElementById(`carat${rowIndex}`);
+                const qtyInput = document.getElementById(`qty${rowIndex}`);
+                const priceInput = document.getElementById(`price${rowIndex}`);
+
+                if (caratInput && !Number.isNaN(caratValue)) {
+                  caratInput.value = caratValue.toString();
+                }
+                if (qtyInput && !Number.isNaN(qtyValue)) {
+                  qtyInput.value = qtyValue.toString();
+                }
+                if (priceInput && !Number.isNaN(priceValue)) {
+                  priceInput.value = priceValue.toString();
+                }
+              });
+
+              diamondCount = rowsToUse.length || 1;
+              for (let i = rowsToUse.length + 1; i <= MAX_DIAMONDS; i++) {
+                const hiddenRow = document.getElementById(`diamondRow${i}`);
+                if (hiddenRow) hiddenRow.classList.add("hidden");
+              }
+
+              const addButton = document.getElementById("addDiamondButton");
+              if (addButton) {
+                if (diamondCount >= MAX_DIAMONDS) {
+                  addButton.classList.add("hidden");
+                } else {
+                  addButton.classList.remove("hidden");
+                }
+              }
+            }
+          } catch (error) {
+            console.warn("Invalid diamonds param. Expected JSON array.", error);
+          }
+        }
+      }
+
       // ---------- Init ----------
       window.onload = function () {
         const sel = document.getElementById("goldKaratSelect");
@@ -1485,6 +1587,7 @@
           document.getElementById("diamondInputsContainer").appendChild(row1);
         }
 
+        applyUrlParams();
         calculatePrice();
       };
     </script>
